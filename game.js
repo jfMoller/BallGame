@@ -12,7 +12,7 @@ import {
 } from "./enemy.js";
 import { Entity, Position, Velocity } from "./entity.js";
 import { Player, drawPlayerLives } from "./player.js";
-import { Shield, triggerShield } from "./shield.js";
+import { collisionOfShieldAndEnemy, Shield, triggerShield } from "./shield.js";
 import { circlesCollide } from "./utility.js";
 
 export const canvas = document.getElementById("canvas");
@@ -42,6 +42,9 @@ let lastTick = Date.now();
 
 let EnemyTickCount = 0;
 let BoostTickCount = 0;
+
+
+
 function tick() {
   let currentTick = Date.now();
   let deltaTime = (currentTick - lastTick) / 1000;
@@ -67,24 +70,23 @@ function tick() {
   for (let i = 0; i < game.entities.length; ++i) {
     let entity = game.entities[i];
     
+    if (entity instanceof Enemy) {
+      let enemy = entity;
     if (
-      circlesCollide(game.player, entity) &&
+      circlesCollide(game.player, enemy) &&
       entity instanceof Enemy &&
-      game.player.buff.invunerable !== true
+      game.player.buff.invunerable !== true &&
+      game.player.shield !== true
     ) {
       game.entities.splice(i, 1);
       game.player.lives--;
     }
-   /*  if (
-      circlesCollide(shield, entity) &&
-      shield !== undefined &&
-      entity instanceof Enemy
-    ) {
-      console.log("hit")
-    } */
-    
+    removesEnemies(enemy); //removes enemies that exit the canvas
+  }
     //removes boosts if the player touches them
-    if (collisionOfBoostAndPlayer(game, entity) && entity instanceof Boost) {
+    if (entity instanceof Boost) {
+      let boost = entity;
+    if (collisionOfBoostAndPlayer(game, boost) && entity instanceof Boost) {
       game.entities.splice(i, 1);
       if (entity.type === "healing") {
         game.player.buff.healing = true;
@@ -97,13 +99,23 @@ function tick() {
         game.player.buff.invunerable = true;
       }
     }
-     /*  if (
-        shieldCollide(entity) &&
-        entity instanceof Entity
-      ) {
-        console.log("hit");
-      } */
-    }
+  }
+  if (entity instanceof Shield) {
+    let shield = entity;
+  if (
+    circlesCollide(shield, entity) &&
+    entity instanceof Enemy &&
+    game.player.shield
+  ) {
+    game.entities.splice(i, 1);
+  }
+}
+
+  
+      }
+
+    
+    
 
   if (game.player.lives === 0) {
     alert("Game over!");
@@ -114,7 +126,6 @@ function tick() {
     EnemyTickCount = 0;
     spawnEnemies(game); //spawns enemies from different directions
   }
-  removesEnemies(game); //removes enemies that exit the canvas
 
   if (BoostTickCount % 500 === 0) {
     BoostTickCount = 0;

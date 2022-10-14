@@ -3,12 +3,9 @@ import { Player } from "./player.js";
 import { context, game } from "./game.js";
 
 export class Shield extends Entity {
-  constructor(position) {
+  constructor(position, velocity) {
     super(position)
-    this.velocity = new Velocity(
-      game.player.velocity.dx,
-      game.player.velocity.dy
-    );
+    this.velocity = velocity;
     this.radius = 60;
     this.color = "rgba(255, 239, 98, 0.2)";
     this.borderColor = "yellow";
@@ -32,14 +29,17 @@ export class Shield extends Entity {
     context.closePath();
   }
   tick(game, deltaTime) {
-    this.velocity.dx = game.player.velocity.dx * deltaTime;
-    this.velocity.dy = game.player.velocity.dy * deltaTime;
+    if (game.player.shield){
+    this.position.x = this.velocity.dx * deltaTime;
+    this.position.y = this.velocity.dy * deltaTime;
+    }
   }
 }
 
 export function triggerShield(game) {
     if (game.player.shield) {
-    game.entities.push(new Shield(game.player.position.x, game.player.position.y));
+    game.entities.push(new Shield(new Position(game.player.position.x, game.player.position.y)),
+    new Velocity(game.player.velocity.dx, game.player.velocity.dy));
     game.player.shield = false;
  
     setTimeout(function () {
@@ -52,5 +52,15 @@ export function triggerShield(game) {
     }, 5000);
   }
   }
-
+  export function collisionOfShieldAndEnemy(shield, enemy) {
+    let distance = Math.sqrt(
+      (shield.position.x - enemy.position.x) ** 2 +
+        (shield.position.y - enemy.position.y) ** 2
+    );
+    if (distance < shield.radius + enemy.radius) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 

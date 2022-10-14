@@ -9,6 +9,7 @@ export class Enemy extends Entity {
     this.velocity = velocity;
     this.color = "red";
     this.borderColor = "black";
+    this.id = "Enemy"
   }
   draw() {
     context.beginPath();
@@ -49,21 +50,18 @@ export function spawnEnemies(game) {
   game.entities.push(enemyDirection[randomDirection]);
 }
 
-export function removesEnemies(game) {
+export function removesEnemies(enemy) {
   //removes enemies that exit the canvas from game array
-  for (let i = 1; i < game.entities.length; ++i) {
-    let entity = game.entities[i];
-
     if (
-      entity.position.x > width + entity.radius ||
-      entity.position.x < -entity.radius ||
-      entity.position.y < -entity.radius ||
-      entity.position.y > height + entity.radius
+      enemy.position.x > width + enemy.radius ||
+      enemy.position.x < -enemy.radius ||
+      enemy.position.y < -enemy.radius ||
+      enemy.position.y > height + enemy.radius
     ) {
-      game.entities.splice(i, 1);
+      game.entities.splice(game.entities.indexOf(enemy), 1);
     }
-  }
 }
+
 
 export function drawEnemyFaces(enemy) {
   context.font = '48px serif';
