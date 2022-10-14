@@ -12,7 +12,7 @@ import {
 } from "./enemy.js";
 import { Entity, Position, Velocity } from "./entity.js";
 import { Player, drawPlayerLives } from "./player.js";
-import { collisionOfShieldAndEnemy, Shield, triggerShield } from "./shield.js";
+import { collisionOfShieldAndEnemy, Shield } from "./shield.js";
 import { circlesCollide } from "./utility.js";
 
 export const canvas = document.getElementById("canvas");
@@ -22,14 +22,17 @@ export const halfWidth = canvas.width / 2;
 export const height = canvas.height;
 export const halfHeight = canvas.height / 2;
 
+
 export class Game {
   constructor(canvas, context) {
     this.canvas = canvas;
     this.context = context;
     this.entities = [
       new Player(new Position(halfWidth, halfHeight)),
+      new Shield(new Position(halfWidth, halfHeight))
     ];
     this.player = this.entities[0];
+    this.shield = this.entities[1];
   }
   start() {
     tick();
@@ -39,10 +42,11 @@ export class Game {
 export const game = new Game(canvas, context);
 
 let lastTick = Date.now();
-
 let EnemyTickCount = 0;
 let BoostTickCount = 0;
 
+console.log(game.shield.position.x)
+console.log(game.shield.position.y)
 
 
 function tick() {
@@ -65,7 +69,7 @@ function tick() {
   }
   drawPlayerLives(game);
   //creates shield around player if player presses space
-  triggerShield(game);
+  /* triggerShield(game); */
   //removes enemies which collides with the player
   for (let i = 0; i < game.entities.length; ++i) {
     let entity = game.entities[i];
@@ -81,6 +85,13 @@ function tick() {
       game.entities.splice(i, 1);
       game.player.lives--;
     }
+    if (game.player.shield) {
+      if (collisionOfShieldAndEnemy(game.shield, enemy) < game.shield.radius + enemy.radius) {
+      enemy.velocity.dx *= -1;
+      enemy.velocity.dy *= -1;
+    }
+  }
+
     removesEnemies(enemy); //removes enemies that exit the canvas
   }
     //removes boosts if the player touches them
@@ -100,16 +111,6 @@ function tick() {
       }
     }
   }
-  if (entity instanceof Shield) {
-    let shield = entity;
-  if (
-    circlesCollide(shield, entity) &&
-    entity instanceof Enemy &&
-    game.player.shield
-  ) {
-    game.entities.splice(i, 1);
-  }
-}
 
   
       }
