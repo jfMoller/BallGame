@@ -15,7 +15,6 @@ export function handleKeyDown(event) {
   }
   if (event.key === " ") {
     game.player.shield = true;
-    console.log(game.shield, "game shield")
     game.shield.position.x = 0;
     game.shield.position.y = 0;
     game.shield.velocity.dx = 0;

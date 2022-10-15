@@ -7,7 +7,7 @@ export class Shield {
     this.position = position;
     this.velocity = new Velocity(0, 0);
     this.radius = 100;
-    this.color = "rgba(255, 239, 98, 0.1)";
+    this.color = "rgba(255, 239, 98, 0.02)";
     this.borderColor = "yellow";
     this.lineWidth = 1;
     this.id = "Shield";
@@ -38,13 +38,20 @@ export class Shield {
   bounce() {
     if (
       this.position.x > width - this.radius ||
-      this.position.x <= this.radius ||
+      this.position.x <= this.radius
+    ) {
+      this.velocity.dx *= -1;
+    }
+    if (
       this.position.y < this.radius ||
       this.position.y > height - this.radius
     ) {
-      this.velocity.dx *= -1;
       this.velocity.dy *= -1;
     }
+
+
+
+    
   }
 }
 

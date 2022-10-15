@@ -28,7 +28,6 @@ export class Game {
     this.context = context;
     this.entities = [new Player(new Position(halfWidth, halfHeight))];
     this.shield = new Shield(new Position(halfWidth, halfHeight));
-    console.log(this.shield);
     this.player = this.entities[0];
     this.deltaTime = 0;
   }
@@ -42,6 +41,7 @@ export const game = new Game(canvas, context);
 let lastTick = Date.now();
 let EnemyTickCount = 0;
 let BoostTickCount = 0;
+let shieldTickCount = 0;
 
 function tick() {
   let currentTick = Date.now();
@@ -73,18 +73,13 @@ function tick() {
       if (
         circlesCollide(game.player, enemy) &&
         entity instanceof Enemy &&
-        game.player.buff.invunerable !== true &&
-        game.player.shield !== true
+        game.player.buff.invunerable !== true
       ) {
         game.entities.splice(i, 1);
         game.player.lives--;
       }
       if (game.player.shield) {
-        let amountOfShieldsDrawn = 0;
-        while (amountOfShieldsDrawn < 1) {
-          game.shield.draw();
-          amountOfShieldsDrawn++;
-        }
+        game.shield.draw();
         game.shield.tick(game);
         game.shield.bounce();
         if (
@@ -99,11 +94,10 @@ function tick() {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
-        setTimeout(function () {
-          if (game.shield.radius !== 5) {
-            game.shield.radius -= 0.1;
-          }
-        }, 5000);
+        
+        
+          
+        
       
       }
 
