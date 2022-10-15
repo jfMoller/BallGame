@@ -15,6 +15,29 @@ export function handleKeyDown(event) {
   }
   if (event.key === " ") {
     game.player.shield = true;
+    console.log(game.shield, "game shield")
+    game.shield.position.x = 0;
+    game.shield.position.y = 0;
+    game.shield.velocity.dx = 0;
+    game.shield.velocity.dy = 0;
+    game.shield.position.x = game.player.position.x;
+    game.shield.position.y = game.player.position.y;
+    if (game.player.keys.up) {
+      game.shield.velocity.dy -= game.player.velocity.dy * game.deltaTime;
+    }
+    if (
+      game.player.keys.down
+    ) {
+      game.shield.velocity.dy += game.player.velocity.dy * game.deltaTime;
+    }
+    if (game.player.keys.left) {
+      game.shield.velocity.dx -= game.player.velocity.dx * game.deltaTime;
+    }
+    if (
+      game.player.keys.right
+    ) {
+      game.shield.velocity.dx += game.player.velocity.dx * game.deltaTime;
+    }
   }
 }
 export function handleKeyUp(event) {

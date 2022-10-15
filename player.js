@@ -35,8 +35,8 @@ export class Player extends Entity {
     context.strokeStyle = this.borderColor;
     context.lineWidth = this.lineWidth;
     context.arc(
-      game.player.position.x,
-      game.player.position.y,
+      this.position.x,
+      this.position.y,
       this.radius,
       0,
       Math.PI * 2
@@ -47,16 +47,16 @@ export class Player extends Entity {
   }
   tick(game, deltaTime) {
     if (game.player.keys.up && game.player.position.y > game.player.radius) {
-      game.player.position.y -= this.velocity.dy * deltaTime;
+      game.player.position.y -= this.velocity.dy * game.deltaTime;
     }
     if (
       game.player.keys.down &&
       game.player.position.y < height - this.radius
     ) {
-      game.player.position.y += this.velocity.dy * deltaTime;
+      game.player.position.y += this.velocity.dy * game.deltaTime;
     }
     if (game.player.keys.left && game.player.position.x > this.radius) {
-      game.player.position.x -= this.velocity.dx * deltaTime;
+      game.player.position.x -= this.velocity.dx * game.deltaTime;
     }
     if (
       game.player.keys.right &&
