@@ -13,7 +13,8 @@ export function handleKeyDown(event) {
   if (event.key === "d") {
     game.player.keys.right = true;
   }
-  if (event.key === " ") {
+  if (event.key === " " && game.player.shieldReady) {
+    game.player.shieldReady = false;
     game.player.shield = true;
     game.shield.position.x = 0;
     game.shield.position.y = 0;

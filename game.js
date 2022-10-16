@@ -41,7 +41,6 @@ export const game = new Game(canvas, context);
 let lastTick = Date.now();
 let EnemyTickCount = 0;
 let BoostTickCount = 0;
-let shieldTickCount = 0;
 
 function tick() {
   let currentTick = Date.now();
@@ -78,7 +77,16 @@ function tick() {
         game.entities.splice(i, 1);
         game.player.lives--;
       }
+      if (game.player.shieldReady === false) {
+        game.player.shieldTimer--;
+      }
+      console.log(game.player.shieldTimer + " " + game.player.shieldReady);
+      if (game.player.shieldTimer % 30000 === 0) {
+        game.player.shieldReady = true;
+      }
+
       if (game.player.shield) {
+        game.shield.timer--;
         game.shield.draw();
         game.shield.tick(game);
         game.shield.bounce();
@@ -88,17 +96,20 @@ function tick() {
         ) {
           game.entities.splice(i, 1);
         } else if (
-          collisionOfShieldAndEnemy(game.shield, enemy) <
+          collisionOfShieldAndEnemy(game.shield, enemy) <=
           game.shield.radius + enemy.radius
         ) {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
-        
-        
-          
-        
-      
+        if (game.shield.timer < 1000) {
+          game.shield.radius -= 0.1;
+        }
+        if (game.shield.timer === 0) {
+          game.player.shield = false;
+          game.shield.timer = 10000;
+          game.shield.radius = 100;
+        }
       }
 
       removesEnemies(enemy); //removes enemies that exit the canvas

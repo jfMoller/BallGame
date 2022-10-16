@@ -27,6 +27,8 @@ export class Player extends Entity {
     this.lives = 4;
     this.buff = new Buff();
     this.lineWidth = 1;
+    this.shieldTimer = 10000;
+    this.shieldReady = false;
     this.shield = false;
   }
   draw(game) {

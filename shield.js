@@ -11,6 +11,7 @@ export class Shield {
     this.borderColor = "yellow";
     this.lineWidth = 1;
     this.id = "Shield";
+    this.timer = 10000;
   }
 
   draw() {
