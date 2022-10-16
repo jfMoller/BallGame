@@ -2,6 +2,7 @@ import {
   Boost,
   boostEffect,
   collisionOfBoostAndPlayer,
+  drawBoostType,
   spawnBoosts,
 } from "./boost.js";
 import {
@@ -11,12 +12,17 @@ import {
   drawEnemyFaces,
 } from "./enemy.js";
 import { Entity, Position, Velocity } from "./entity.js";
+import { shieldInterface } from "./interface.js";
 import { Player, drawPlayerLives } from "./player.js";
 import { collisionOfShieldAndEnemy, Shield } from "./shield.js";
 import { circlesCollide } from "./utility.js";
 
 export const canvas = document.getElementById("canvas");
 export const context = canvas.getContext("2d");
+
+export const interfaceCanvas = document.getElementById("interfaceCanvas");
+export const interfaceContext = interfaceCanvas.getContext("2d");
+
 export const width = canvas.width;
 export const halfWidth = canvas.width / 2;
 export const height = canvas.height;
@@ -37,6 +43,9 @@ export class Game {
 }
 
 export const game = new Game(canvas, context);
+
+shieldInterface()
+
 
 let lastTick = Date.now();
 let EnemyTickCount = 0;
@@ -117,6 +126,7 @@ function tick() {
     //removes boosts if the player touches them
     if (entity instanceof Boost) {
       let boost = entity;
+      drawBoostType(boost);
       if (collisionOfBoostAndPlayer(game, boost) && entity instanceof Boost) {
         game.entities.splice(i, 1);
         if (entity.type === "healing") {

@@ -6,7 +6,7 @@ import { game } from "./game.js";
 export class Boost extends Entity {
   constructor(position, color, type) {
     super(position);
-    this.side = 20;
+    this.radius = 10;
     this.color = color;
     this.borderColor = "black";
     this.type = type;
@@ -15,12 +15,7 @@ export class Boost extends Entity {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
-    context.rect(
-      this.position.x - this.side / 2,
-      this.position.y - this.side / 2,
-      this.side,
-      this.side
-    );
+    context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
     context.stroke();
     context.fill();
     context.closePath();
@@ -35,17 +30,17 @@ export function spawnBoosts(game) {
   let boostTypes = [
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "red",
+      "black",
       "healing"
     ),
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "rgba(39, 245, 237)",
+      "black",
       "speed"
     ),
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "purple",
+      "black",
       "invunerable"
     ),
   ];
@@ -57,7 +52,7 @@ export function collisionOfBoostAndPlayer(game, boost) {
     (game.player.position.x - boost.position.x) ** 2 +
       (game.player.position.y - boost.position.y) ** 2
   );
-  if (distance < game.player.radius + boost.side / 2) {
+  if (distance < game.player.radius + boost.radius) {
     return true;
   } else {
     return false;
@@ -88,12 +83,20 @@ export function boostEffect(game) {
   }
 }
 
-  /* export function drawBoostType(entity) {
-    context.font = '40px serif';
+  export function drawBoostType(entity) {
     context.fillStyle = 'black';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
     if (entity.type === "healing") {
+      context.font = '35px serif';
     context.fillText("❤️", entity.position.x, entity.position.y);
     }
-} */
+    if (entity.type === "speed") {
+      context.font = '48px serif';
+    context.fillText("🥏", entity.position.x, entity.position.y);
+    }
+    if (entity.type === "invunerable") {
+      context.font = '55px serif';
+    context.fillText("👓", entity.position.x, entity.position.y);
+    }
+}

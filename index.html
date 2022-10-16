@@ -1,7 +1,12 @@
 <html>
   <head>
     <style>
-      #container {
+      #interface_container {
+        width: 1400;
+        height: 50;
+        background-color: rgb(182, 182, 182);
+      }
+      #canvas_container {
         width: 1400;
         height: 900;
         background-color: rgb(0, 0, 0);
@@ -10,7 +15,10 @@
     </style>
   </head>
   <body>
-    <div id="container">
+    <div id="interface_container">
+    <canvas id="interfaceCanvas" width="1400px" height="100px"></canvas>
+  </div>
+    <div id="canvas_container">
       <canvas id="canvas" width="1400px" height="900px"> </canvas>
       <script type="module" src="main.js"></script>
     </div>
