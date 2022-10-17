@@ -1,6 +1,8 @@
 import { Entity, Position, Velocity } from "./entity.js";
-import { context, width, halfWidth, height, halfHeight, game } from "./game.js";
+import { context, width, height, game } from "./game.js";
+import { Player } from "./player.js";
 import { generatesRanNumBetween } from "./utility.js";
+import { circlesCollide } from "./utility.js";
 
 export class Enemy extends Entity {
   constructor(position, velocity) {
@@ -25,9 +27,9 @@ export class Enemy extends Entity {
     this.position.y += this.velocity.dy * deltaTime;
   }
 }
-export function spawnEnemies(game, modifier) {
+export function spawnEnemies(game) {
   let randomDirection = generatesRanNumBetween(3, 0);
-  let randomVelocity = generatesRanNumBetween(50, modifier);
+  let randomVelocity = generatesRanNumBetween(50, 0);
 
   let enemyDirection = [
     new Enemy(
@@ -68,6 +70,10 @@ export function drawEnemyFaces(enemy) {
   context.fillStyle = 'black';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
+  context.fillText("👿", enemy.position.x, enemy.position.y);
+
+  if (circlesCollide(game.player, enemy, 100)) {
   context.fillText("😈", enemy.position.x, enemy.position.y);
+  }
 }
 

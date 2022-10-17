@@ -23,8 +23,8 @@ export class Boost extends Entity {
   tick() {}
 }
 export function spawnBoosts(game) {
-  let randomPositionX = generatesRanNumBetween(width, 0);
-  let randomPositionY = generatesRanNumBetween(height, 0);
+  let randomPositionX = generatesRanNumBetween(width - 60, 0);
+  let randomPositionY = generatesRanNumBetween(height - 60, 0);
   let randomBoost = generatesRanNumBetween(2, 0);
 
   let boostTypes = [
@@ -47,21 +47,11 @@ export function spawnBoosts(game) {
   game.entities.push(boostTypes[randomBoost]);
 }
 
-export function collisionOfBoostAndPlayer(game, boost) {
-  let distance = Math.sqrt(
-    (game.player.position.x - boost.position.x) ** 2 +
-      (game.player.position.y - boost.position.y) ** 2
-  );
-  if (distance < game.player.radius + boost.radius) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 export function boostEffect(game) {
   if (game.player.buff.healing) {
+    if (game.player.lives < 5) {
     game.player.lives++;
+  }
     game.player.buff.healing = false;
   }
   if (game.player.buff.speed) {
@@ -76,7 +66,6 @@ export function boostEffect(game) {
     }, 5000);
   }
   if (game.player.buff.invunerable) {
-    console.log("INVUNERABLE");
     setTimeout(function () {
       game.player.buff.invunerable = false;
     }, 5000);
@@ -92,11 +81,11 @@ export function boostEffect(game) {
     context.fillText("❤️", entity.position.x, entity.position.y);
     }
     if (entity.type === "speed") {
-      context.font = '48px serif';
+      context.font = '50px serif';
     context.fillText("🍬", entity.position.x, entity.position.y);
     }
     if (entity.type === "invunerable") {
-      context.font = '55px serif';
+      context.font = '60px serif';
     context.fillText("🎭", entity.position.x, entity.position.y);
     }
 }

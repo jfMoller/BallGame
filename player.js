@@ -27,8 +27,8 @@ export class Player extends Entity {
     this.lives = 4;
     this.buff = new Buff();
     this.lineWidth = 1;
-    this.shieldTimer = 10000;
-    this.shieldReady = false;
+    this.shieldTimer = 0;
+    this.shieldReady = true;
     this.shield = false;
   }
   draw(game) {
@@ -68,7 +68,7 @@ export class Player extends Entity {
     }
   }
 }
-export function drawPlayerLives(game) {
+export function drawPlayerFaces(game) {
   context.font = "48px serif";
   context.fillStyle = "black";
   context.textAlign = "center";
@@ -78,7 +78,10 @@ export function drawPlayerLives(game) {
     context.fillText("🥸", game.player.position.x, game.player.position.y);
   }
 
-  if (game.player.lives >= 4 && game.player.buff.invunerable !== true) {
+  if (game.player.lives >= 5 && game.player.buff.invunerable !== true) {
+    context.fillText("😁", game.player.position.x, game.player.position.y);
+  }
+  if (game.player.lives === 4 && game.player.buff.invunerable !== true) {
     context.fillText("😃", game.player.position.x, game.player.position.y);
   }
   if (game.player.lives === 3 && game.player.buff.invunerable !== true) {

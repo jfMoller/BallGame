@@ -11,7 +11,7 @@ export class Shield {
     this.borderColor = "yellow";
     this.lineWidth = 1;
     this.id = "Shield";
-    this.timer = 10000;
+    this.sizeTimer = 10000;
   }
 
   draw() {
@@ -54,12 +54,4 @@ export class Shield {
 
     
   }
-}
-
-export function collisionOfShieldAndEnemy(shield, enemy) {
-  let distance = Math.sqrt(
-    (shield.position.x - enemy.position.x) ** 2 +
-      (shield.position.y - enemy.position.y) ** 2
-  );
-  return distance;
 }

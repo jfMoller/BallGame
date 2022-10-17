@@ -1,19 +1,13 @@
-import {
-  Boost,
-  boostEffect,
-  collisionOfBoostAndPlayer,
-  drawBoostType,
-  spawnBoosts,
-} from "./boost.js";
+import { Boost, boostEffect, drawBoostType, spawnBoosts } from "./boost.js";
 import {
   Enemy,
   spawnEnemies,
   removesEnemies,
   drawEnemyFaces,
 } from "./enemy.js";
-import { Entity, Position, Velocity } from "./entity.js";
-import { Player, drawPlayerLives } from "./player.js";
-import { collisionOfShieldAndEnemy, Shield } from "./shield.js";
+import { Position } from "./entity.js";
+import { Player, drawPlayerFaces } from "./player.js";
+import { Shield } from "./shield.js";
 import { circlesCollide } from "./utility.js";
 import { gameInterface } from "./interface.js";
 
@@ -45,18 +39,17 @@ export const game = new Game(canvas, context);
 
 let lastTick = Date.now();
 let lastTime = Date.now();
-let EnemyTickCount = 0;
-let BoostTickCount = 0;
-let boostStatus = "";
+let enemyTickCount = 0;
+let boostTickCount = 0;
 
 function tick() {
   let currentTick = Date.now();
   game.deltaTime = (currentTick - lastTick) / 1000;
   lastTick = currentTick;
-  EnemyTickCount++;
-  BoostTickCount++;
+  enemyTickCount++;
+  boostTickCount++;
   context.clearRect(0, 0, width, height);
-  //score
+  //score, +1 point per second elapsed ingame
   let currentTime = Date.now();
   game.score = Math.floor((currentTime - lastTime) / 1000);
 
@@ -70,8 +63,8 @@ function tick() {
       drawEnemyFaces(entity);
     }
   }
-  drawPlayerLives(game);
-  //creates shield around player if player presses space
+  //face change as a result of changed amount of player lives
+  drawPlayerFaces(game);
 
   //removes enemies which collides with the player
   for (let i = 0; i < game.entities.length; ++i) {
@@ -79,45 +72,43 @@ function tick() {
 
     if (entity instanceof Enemy) {
       let enemy = entity;
+      //when colliding with player
       if (
-        circlesCollide(game.player, enemy) &&
-        entity instanceof Enemy &&
+        circlesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
         game.entities.splice(i, 1);
+        
         game.player.lives--;
       }
+      //initiates count down for shield ability
       if (game.player.shieldReady === false) {
-        game.player.shieldTimer--;
+        game.player.shieldTimer++;
       }
-
+      //const value -> 30000 may need to change depending on FPS, may need deltaTime
       if (game.player.shieldTimer % 30000 === 0) {
         game.player.shieldReady = true;
+        game.player.shieldTimer = 0;
       }
-
+      //when shield is activated
       if (game.player.shield) {
-        game.shield.timer--;
+        game.shield.sizeTimer--;
         game.shield.draw();
         game.shield.tick(game);
         game.shield.bounce();
-        if (
-          collisionOfShieldAndEnemy(game.shield, enemy) <
-          game.shield.radius - 20
-        ) {
+        if (circlesCollide(game.shield, enemy, -20)) {
           game.entities.splice(i, 1);
-        } else if (
-          collisionOfShieldAndEnemy(game.shield, enemy) <=
-          game.shield.radius + enemy.radius
-        ) {
+        } else if (circlesCollide(game.shield, enemy, 0)) {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
-        if (game.shield.timer < 1000) {
+        //to shrink shield size before it disappears
+        if (game.shield.sizeTimer < 1000) {
           game.shield.radius -= 0.1;
         }
-        if (game.shield.timer === 0) {
+        if (game.shield.sizeTimer === 0) {
           game.player.shield = false;
-          game.shield.timer = 10000;
+          game.shield.sizeTimer = 10000;
           game.shield.radius = 100;
         }
       }
@@ -128,18 +119,16 @@ function tick() {
     if (entity instanceof Boost) {
       let boost = entity;
       drawBoostType(boost);
-      if (collisionOfBoostAndPlayer(game, boost) && entity instanceof Boost) {
+      if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i, 1);
         if (entity.type === "healing") {
           game.player.buff.healing = true;
         }
         if (entity.type === "speed") {
           game.player.buff.speed = true;
-          boostStatus = "speed";
         }
         if (entity.type === "invunerable") {
           game.player.buff.invunerable = true;
-          boostStatus = "invunerable";
         }
       }
     }
@@ -150,25 +139,21 @@ function tick() {
     return;
   }
 
-  game.difficulty = 1 + game.score / 10;
+  //add difficulty here
 
-  if (EnemyTickCount % 20 === 0) {
-    EnemyTickCount = 0;
-    spawnEnemies(game, game.difficulty); //spawns enemies from different directions
+  if (enemyTickCount % 20 === 0) {
+    enemyTickCount = 0;
+    spawnEnemies(game); //spawns enemies from different directions
   }
 
-  if (BoostTickCount % 500 === 0) {
-    BoostTickCount = 0;
+  if (boostTickCount % 500 === 0) {
+    boostTickCount = 0;
     spawnBoosts(game); //spawns boosts in different position on the canvas
   }
   boostEffect(game);
 
   //game interface
-  gameInterface(
-    game.player.shieldReady,
-    game.player.lives,
-    game.score
-  );
+  gameInterface(game.player.shieldReady, game.player.lives, game.score);
 
   requestAnimationFrame(tick);
 }
