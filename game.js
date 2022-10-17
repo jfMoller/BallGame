@@ -12,16 +12,13 @@ import {
   drawEnemyFaces,
 } from "./enemy.js";
 import { Entity, Position, Velocity } from "./entity.js";
-import { shieldInterface } from "./interface.js";
 import { Player, drawPlayerLives } from "./player.js";
 import { collisionOfShieldAndEnemy, Shield } from "./shield.js";
 import { circlesCollide } from "./utility.js";
+import { gameInterface } from "./interface.js";
 
 export const canvas = document.getElementById("canvas");
 export const context = canvas.getContext("2d");
-
-export const interfaceCanvas = document.getElementById("interfaceCanvas");
-export const interfaceContext = interfaceCanvas.getContext("2d");
 
 export const width = canvas.width;
 export const halfWidth = canvas.width / 2;
@@ -36,6 +33,7 @@ export class Game {
     this.shield = new Shield(new Position(halfWidth, halfHeight));
     this.player = this.entities[0];
     this.deltaTime = 0;
+    this.score = 0;
   }
   start() {
     tick();
@@ -44,12 +42,11 @@ export class Game {
 
 export const game = new Game(canvas, context);
 
-shieldInterface()
-
-
 let lastTick = Date.now();
+let lastTime = Date.now();
 let EnemyTickCount = 0;
 let BoostTickCount = 0;
+let boostStatus = "";
 
 function tick() {
   let currentTick = Date.now();
@@ -58,6 +55,9 @@ function tick() {
   EnemyTickCount++;
   BoostTickCount++;
   context.clearRect(0, 0, width, height);
+  //score
+  let currentTime = Date.now();
+  game.score = Math.floor((currentTime - lastTime) / 1000);
 
   //draws and moves all objects in game array
   for (let i = 0; i < game.entities.length; ++i) {
@@ -89,7 +89,7 @@ function tick() {
       if (game.player.shieldReady === false) {
         game.player.shieldTimer--;
       }
-      console.log(game.player.shieldTimer + " " + game.player.shieldReady);
+
       if (game.player.shieldTimer % 30000 === 0) {
         game.player.shieldReady = true;
       }
@@ -131,13 +131,14 @@ function tick() {
         game.entities.splice(i, 1);
         if (entity.type === "healing") {
           game.player.buff.healing = true;
-          console.log(game.player.lives);
         }
         if (entity.type === "speed") {
           game.player.buff.speed = true;
+          boostStatus = "speed";
         }
         if (entity.type === "invunerable") {
           game.player.buff.invunerable = true;
+          boostStatus = "invunerable";
         }
       }
     }
@@ -158,6 +159,9 @@ function tick() {
     spawnBoosts(game); //spawns boosts in different position on the canvas
   }
   boostEffect(game);
+
+  //game interface
+  gameInterface(game.player.shieldReady, game.player.lives, boostStatus, game.score);
 
   requestAnimationFrame(tick);
 }
