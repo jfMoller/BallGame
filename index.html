@@ -1,29 +1,37 @@
 <html>
   <head>
     <style>
-      #interface_container {
-
-        width: 1400;
-        height: 100;
-        background-color: rgb(182, 182, 182);
+      .center-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
       }
-  
+      .interface {
+        width: 1400;
+        height: 55;
+        background-color: rgba(119, 151, 255, 0.895);
+      }
+      #bottomUi {
+        height: 
+      }
+
       #canvas_container {
         width: 1400;
-        height: 900;
+        height: 1000;
         background-color: rgb(0, 0, 0);
       }
-    
     </style>
   </head>
   <body>
-    <div id="interface_container">
-  <div id="topUi"></div>
-  <div id="bottomUi"></div>
-    </div>
-    <div id="canvas_container">
-      <canvas id="canvas" width="1400px" height="900px"> </canvas>
-      <script type="module" src="main.js"></script>
+    <div class="center-screen">
+      <div id="canvas_container">
+        <div class="interface" id="topUi"></div>
+        <canvas id="canvas" width="1400px" height="900px"> </canvas>
+        <script type="module" src="main.js"></script>
+        <div class="interface" id="bottomUi"></div>
+      </div>
     </div>
   </body>
 </html>

@@ -34,6 +34,7 @@ export class Game {
     this.player = this.entities[0];
     this.deltaTime = 0;
     this.score = 0;
+    this.difficulty = 0;
   }
   start() {
     tick();
@@ -149,9 +150,11 @@ function tick() {
     return;
   }
 
+  game.difficulty = 1 + game.score / 10;
+
   if (EnemyTickCount % 20 === 0) {
     EnemyTickCount = 0;
-    spawnEnemies(game); //spawns enemies from different directions
+    spawnEnemies(game, game.difficulty); //spawns enemies from different directions
   }
 
   if (BoostTickCount % 500 === 0) {
@@ -161,7 +164,11 @@ function tick() {
   boostEffect(game);
 
   //game interface
-  gameInterface(game.player.shieldReady, game.player.lives, boostStatus, game.score);
+  gameInterface(
+    game.player.shieldReady,
+    game.player.lives,
+    game.score
+  );
 
   requestAnimationFrame(tick);
 }

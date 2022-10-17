@@ -93,10 +93,10 @@ export function boostEffect(game) {
     }
     if (entity.type === "speed") {
       context.font = '48px serif';
-    context.fillText("🥏", entity.position.x, entity.position.y);
+    context.fillText("🍬", entity.position.x, entity.position.y);
     }
     if (entity.type === "invunerable") {
       context.font = '55px serif';
-    context.fillText("👓", entity.position.x, entity.position.y);
+    context.fillText("🎭", entity.position.x, entity.position.y);
     }
 }

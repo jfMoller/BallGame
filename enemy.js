@@ -25,9 +25,9 @@ export class Enemy extends Entity {
     this.position.y += this.velocity.dy * deltaTime;
   }
 }
-export function spawnEnemies(game) {
+export function spawnEnemies(game, modifier) {
   let randomDirection = generatesRanNumBetween(3, 0);
-  let randomVelocity = generatesRanNumBetween(50, 0);
+  let randomVelocity = generatesRanNumBetween(50, modifier);
 
   let enemyDirection = [
     new Enemy(

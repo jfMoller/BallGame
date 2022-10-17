@@ -19,7 +19,7 @@ export class Keys {
 export class Player extends Entity {
   constructor(position) {
     super(position);
-    this.radius = 30;
+    this.radius = 28;
     this.velocity = new Velocity(450, 450);
     this.color = "orange";
     this.borderColor = "black";
