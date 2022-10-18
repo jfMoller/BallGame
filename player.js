@@ -89,5 +89,4 @@ export class Player extends Entity {
       this.position.x += this.velocity.dx * game.deltaTime;
     }
   }
-  spawn() {}
 }

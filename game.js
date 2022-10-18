@@ -2,7 +2,7 @@ import { Boost, boostEffect, spawnBoosts } from "./boost.js";
 import { Enemy, spawnEnemies } from "./enemy.js";
 import { Position } from "./entity.js";
 import { Player } from "./player.js";
-import { Shield } from "./shield.js";
+import { Shield, shieldTimer } from "./shield.js";
 import { circlesCollide, isOutsideCanvas } from "./utility.js";
 import { gameInterface } from "./interface.js";
 
@@ -91,42 +91,15 @@ function tick() {
           game.player.buff.invunerable = true;
         }
       }
+      boostEffect(game);
     }
-
-    //initiates count down for shield ability
-    if (game.player.shieldReady === false) {
-      game.player.shieldTimer++;
-    }
-    //const value -> 30000 may need to change depending on FPS, may need deltaTime
-    if (game.player.shieldTimer % 30000 === 0) {
-      game.player.shieldReady = true;
-      game.player.shieldTimer = 0;
-    }
-    //when shield is activated
-    if (game.player.shield) {
-      game.shield.sizeTimer--;
-      game.shield.draw();
-      game.shield.tick(game);
-      game.shield.bounce();
-
-      //to shrink shield size before it disappears
-      if (game.shield.sizeTimer < 1000) {
-        game.shield.radius -= 0.1;
-      }
-      if (game.shield.sizeTimer === 0) {
-        game.player.shield = false;
-        game.shield.sizeTimer = 10000;
-        game.shield.radius = 100;
-      }
-    }
+    shieldTimer(game);
   }
 
   if (game.player.lives === 0) {
     alert("Game over!");
     return;
   }
-
-  boostEffect(game);
 
   requestAnimationFrame(tick);
 }

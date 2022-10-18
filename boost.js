@@ -1,4 +1,4 @@
-import { Entity, Position } from "./entity.js";
+import { Entity, Position, Velocity } from "./entity.js";
 import { context, width, halfWidth, height, halfHeight } from "./game.js";
 import { generatesRanNumBetween } from "./utility.js";
 import { game } from "./game.js";
@@ -73,14 +73,14 @@ export function boostEffect(game) {
     game.player.buff.healing = false;
   }
   if (game.player.buff.speed) {
-    game.player.velocity.dx = 650;
-    game.player.velocity.dy = 650;
+    game.player.velocity = new Velocity(650, 650)
     game.player.borderColor = "rgba(39, 245, 237)";
     game.player.lineWidth = 10;
     setTimeout(function () {
+      game.player.buff.speed = false;
       game.player.borderColor = "black";
       game.player.lineWidth = 1;
-      game.player.buff.speed = false;
+      game.player.velocity = new Velocity(450, 450)
     }, 5000);
   }
   if (game.player.buff.invunerable) {
