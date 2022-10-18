@@ -21,10 +21,20 @@ export class Enemy extends Entity {
     context.stroke();
     context.fill();
     context.closePath();
+
+    context.font = '48px serif';
+    context.fillStyle = 'black';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillText("👿", this.position.x, this.position.y);
+  
+    if (circlesCollide(game.player, this, 100)) {
+    context.fillText("😈", this.position.x, this.position.y);
+    }
   }
-  tick(game, deltaTime) {
-    this.position.x += this.velocity.dx * deltaTime;
-    this.position.y += this.velocity.dy * deltaTime;
+  tick(game) {
+    this.position.x += this.velocity.dx * game.deltaTime;
+    this.position.y += this.velocity.dy * game.deltaTime;
   }
 }
 export function spawnEnemies(game) {
@@ -50,30 +60,5 @@ export function spawnEnemies(game) {
     ),
   ];
   game.entities.push(enemyDirection[randomDirection]);
-}
-
-export function removesEnemies(enemy) {
-  //removes enemies that exit the canvas from game array
-    if (
-      enemy.position.x > width + enemy.radius ||
-      enemy.position.x < -enemy.radius ||
-      enemy.position.y < -enemy.radius ||
-      enemy.position.y > height + enemy.radius
-    ) {
-      game.entities.splice(game.entities.indexOf(enemy), 1);
-    }
-}
-
-
-export function drawEnemyFaces(enemy) {
-  context.font = '48px serif';
-  context.fillStyle = 'black';
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillText("👿", enemy.position.x, enemy.position.y);
-
-  if (circlesCollide(game.player, enemy, 100)) {
-  context.fillText("😈", enemy.position.x, enemy.position.y);
-  }
 }
 

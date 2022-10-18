@@ -19,8 +19,26 @@ export class Boost extends Entity {
     context.stroke();
     context.fill();
     context.closePath();
+
+    context.fillStyle = "black";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    if (this.type === "healing") {
+      context.font = "35px serif";
+      context.fillText("❤️", this.position.x, this.position.y);
+    }
+    if (this.type === "speed") {
+      context.font = "50px serif";
+      context.fillText("🍬", this.position.x, this.position.y);
+    }
+    if (this.type === "invunerable") {
+      context.font = "60px serif";
+      context.fillText("🎭", this.position.x, this.position.y);
+    }
   }
   tick() {}
+
+  spawn() {}
 }
 export function spawnBoosts(game) {
   let randomPositionX = generatesRanNumBetween(width - 60, 0);
@@ -35,8 +53,8 @@ export function spawnBoosts(game) {
     ),
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "black",
-      "speed"
+       "black", 
+       "speed"
     ),
     new Boost(
       new Position(randomPositionX, randomPositionY),
@@ -50,8 +68,8 @@ export function spawnBoosts(game) {
 export function boostEffect(game) {
   if (game.player.buff.healing) {
     if (game.player.lives < 5) {
-    game.player.lives++;
-  }
+      game.player.lives++;
+    }
     game.player.buff.healing = false;
   }
   if (game.player.buff.speed) {
@@ -70,22 +88,4 @@ export function boostEffect(game) {
       game.player.buff.invunerable = false;
     }, 5000);
   }
-}
-
-  export function drawBoostType(entity) {
-    context.fillStyle = 'black';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    if (entity.type === "healing") {
-      context.font = '35px serif';
-    context.fillText("❤️", entity.position.x, entity.position.y);
-    }
-    if (entity.type === "speed") {
-      context.font = '50px serif';
-    context.fillText("🍬", entity.position.x, entity.position.y);
-    }
-    if (entity.type === "invunerable") {
-      context.font = '60px serif';
-    context.fillText("🎭", entity.position.x, entity.position.y);
-    }
 }

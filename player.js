@@ -31,7 +31,7 @@ export class Player extends Entity {
     this.shieldReady = true;
     this.shield = false;
   }
-  draw(game) {
+  draw() {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
@@ -40,54 +40,54 @@ export class Player extends Entity {
     context.stroke();
     context.fill();
     context.closePath();
+
+    context.font = "48px serif";
+    context.fillStyle = "black";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+  
+    if (this.buff.invunerable) {
+      context.fillText("🥸", this.position.x, this.position.y);
+    }
+  
+    if (this.lives >= 5 && this.buff.invunerable !== true) {
+      context.fillText("😁", this.position.x, this.position.y);
+    }
+    if (this.lives === 4 && this.buff.invunerable !== true) {
+      context.fillText("😃", this.position.x, this.position.y);
+    }
+    if (this.lives === 3 && this.buff.invunerable !== true) {
+      context.fillText("🙂", this.position.x, this.position.y);
+    }
+    if (this.lives === 2 && this.buff.invunerable !== true) {
+      context.fillText("😣", this.position.x, this.position.y);
+    }
+    if (this.lives === 1 && this.buff.invunerable !== true) {
+      context.fillText("😖", this.position.x, this.position.y);
+    }
+    if (this.lives <= 0 && this.buff.invunerable !== true) {
+      context.fillText("😵", this.position.x, this.position.y);
+    }
   }
-  tick(game, deltaTime) {
-    if (game.player.keys.up && game.player.position.y > game.player.radius) {
-      game.player.position.y -= this.velocity.dy * game.deltaTime;
+  tick(game) {
+    if (this.keys.up && this.position.y > this.radius) {
+      this.position.y -= this.velocity.dy * game.deltaTime;
     }
     if (
-      game.player.keys.down &&
-      game.player.position.y < height - this.radius
+      this.keys.down &&
+      this.position.y < height - this.radius
     ) {
-      game.player.position.y += this.velocity.dy * game.deltaTime;
+      this.position.y += this.velocity.dy * game.deltaTime;
     }
-    if (game.player.keys.left && game.player.position.x > this.radius) {
-      game.player.position.x -= this.velocity.dx * game.deltaTime;
+    if (this.keys.left && this.position.x > this.radius) {
+      this.position.x -= this.velocity.dx * game.deltaTime;
     }
     if (
-      game.player.keys.right &&
-      game.player.position.x < width - this.radius
+      this.keys.right &&
+      this.position.x < width - this.radius
     ) {
-      game.player.position.x += this.velocity.dx * deltaTime;
+      this.position.x += this.velocity.dx * game.deltaTime;
     }
   }
-}
-export function drawPlayerFaces(player) {
-  context.font = "48px serif";
-  context.fillStyle = "black";
-  context.textAlign = "center";
-  context.textBaseline = "middle";
-
-  if (player.buff.invunerable) {
-    context.fillText("🥸", player.position.x, player.position.y);
-  }
-
-  if (player.lives >= 5 && player.buff.invunerable !== true) {
-    context.fillText("😁", player.position.x, player.position.y);
-  }
-  if (player.lives === 4 && player.buff.invunerable !== true) {
-    context.fillText("😃", player.position.x, player.position.y);
-  }
-  if (player.lives === 3 && player.buff.invunerable !== true) {
-    context.fillText("🙂", player.position.x, player.position.y);
-  }
-  if (player.lives === 2 && player.buff.invunerable !== true) {
-    context.fillText("😣", player.position.x, player.position.y);
-  }
-  if (player.lives === 1 && player.buff.invunerable !== true) {
-    context.fillText("😖", player.position.x, player.position.y);
-  }
-  if (player.lives <= 0 && player.buff.invunerable !== true) {
-    context.fillText("😵", player.position.x, player.position.y);
-  }
+  spawn() {}
 }
