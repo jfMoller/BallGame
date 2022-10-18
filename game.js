@@ -58,27 +58,30 @@ function tick() {
     let entity = game.entities[i];
     entity.tick(game, game.deltaTime);
     entity.draw(game);
-
-    if (entity instanceof Enemy) {
-      drawEnemyFaces(entity);
-    }
   }
-  //face change as a result of changed amount of player lives
-  drawPlayerFaces(game);
 
-  //removes enemies which collides with the player
-  for (let i = 0; i < game.entities.length; ++i) {
+/*   functions/methods from modules, seperated from drawing and moving of objects to prevent
+    graphical bugs when objects are sliced from game.entities array
+ */  for (let i = 0; i < game.entities.length; ++i) {
     let entity = game.entities[i];
 
+    //PLAYER
+    if (entity === game.player) {
+      //depending on amount of player lives
+      drawPlayerFaces(game.player);
+    }
+    //ENEMY
     if (entity instanceof Enemy) {
       let enemy = entity;
+      drawEnemyFaces(enemy);
+      removesEnemies(enemy); //removes enemies that exit the canvas
       //when colliding with player
       if (
         circlesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
         game.entities.splice(i, 1);
-        
+
         game.player.lives--;
       }
       //initiates count down for shield ability
@@ -112,8 +115,6 @@ function tick() {
           game.shield.radius = 100;
         }
       }
-
-      removesEnemies(enemy); //removes enemies that exit the canvas
     }
     //removes boosts if the player touches them
     if (entity instanceof Boost) {
