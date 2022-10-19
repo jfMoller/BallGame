@@ -44,8 +44,8 @@ export class Game {
 export const game = new Game(canvas, context);
 
 let lastTick = Date.now();
-let boostTime = null;
-let shieldTime = null;
+let boostTickTime = null;
+let shieldTickTime = null;
 
 function tick() {
   let currentTick = Date.now();
@@ -96,39 +96,13 @@ function tick() {
 
       if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
-        boostTime = game.tickTime; //create acces through game.
+        boostTickTime = game.tickTime;
         boostEffect(game, boost);
       }
     }
-    if (game.tickTime - boostTime > 5) {
+    if (game.tickTime - boostTickTime > 5) {
       stopBoostEffect(game);
     }
-
-
-
-    if (game.player.keys.space) {
-      shieldTime = game.tickTime; //create acces through game. for loading bar in interface
-    }
-    if (game.tickTime - shieldTime > 10) { //when shield is ready in seconds
-      game.shield.ready = true;
-    }
-    
-      if ((game.tickTime - shieldTime) > 10) { //shrinking when respawned
-        if (game.shield.radius > 1) {
-        game.shield.radius -= 0.1;
-        if (game.shield.radius < 1) {
-          game.shield.radius = 100;
-        game.player.shield = false;
-      }
-      }
-      }
-    
-
-
-
-
-
-
 
   } //END OF FOOR LOOP
 

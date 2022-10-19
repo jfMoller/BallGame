@@ -10,6 +10,7 @@ export class Boost extends Entity {
     this.color = color;
     this.borderColor = "black";
     this.type = type;
+    this.tickTime = null;
   }
   draw() {
     context.beginPath();
