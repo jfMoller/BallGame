@@ -1,6 +1,6 @@
-import { Boost, spawnBoosts } from "./boost.js";
+import { Boost, boostEffect, spawnBoosts, stopBoostEffect } from "./boost.js";
 import { Enemy, spawnEnemies } from "./enemy.js";
-import { Position } from "./entity.js";
+import { Position, Velocity } from "./entity.js";
 import { Player } from "./player.js";
 import { Shield, shieldTimer } from "./shield.js";
 import { circlesCollide, isOutsideCanvas } from "./utility.js";
@@ -23,9 +23,17 @@ export class Game {
       new Shield(new Position(halfWidth, halfHeight))];
     this.player = this.entities[0];
     this.shield = this.entities[1];
+
     this.deltaTime = 0;
     this.score = 0;
     this.difficulty = 0;
+    this.tickTime = 0;
+    this.boostTime = 0;
+
+    this.spawnEnemies = true;
+      this.enemySpawnRate = 500; //ms
+    this.spawnBoosts = true;
+      this.boostSpawnRate = 5000; //ms
   }
   start() {
     tick();
@@ -34,8 +42,10 @@ export class Game {
 
 export const game = new Game(canvas, context);
 
+
 let lastTick = Date.now();
-let lastTime = Date.now();
+let boostTime = null;
+
 
 function tick() {
   let currentTick = Date.now();
@@ -43,10 +53,12 @@ function tick() {
   lastTick = currentTick;
   context.clearRect(0, 0, width, height);
 
-  //score, +1 point per second elapsed ingame
-  let currentTime = Date.now();
-  game.score = Math.floor((currentTime - lastTime) / 1000);
+  //time elapsed since start
+  game.tickTime += game.deltaTime;
 
+  
+  //score, +1 point per second elapsed ingame
+  game.score = Math.floor((game.tickTime));
   //game interface
   gameInterface(game.player.shieldReady, game.player.lives, game.score);
 
@@ -86,18 +98,14 @@ function tick() {
 
       if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
-        if (entity.type === "healing" && game.player.lives < 5) {
-          game.player.buff.healing = true;
-        } else if (entity.type === "speed" && game.player.buff.speed !== true) {
-          game.player.buff.speed = true;
-        } else if (entity.type === "invunerable" && game.player.buff.invunerable !== true) {
-          game.player.buff.invunerable = true;
-        }
+        boostTime = game.tickTime;
+        boostEffect(game, boost)
       }
-
     }
-  
-  }
+    if (game.tickTime - boostTime > 5) {
+    stopBoostEffect(game);
+    }
+  } //END OF FOOR LOOP
 
   if (game.player.lives === 0) {
     alert("Game over!");
@@ -106,10 +114,15 @@ function tick() {
 
   requestAnimationFrame(tick);
 }
+if (game.spawnEnemies) {
 setInterval(() => {
   spawnEnemies(game);
-}, 500);
+}, game.enemySpawnRate);
+}
 
+if (game.spawnBoosts) {
 setInterval(() => {
   spawnBoosts(game);
-}, 3000);
+}, game.boostSpawnRate);
+}
+
