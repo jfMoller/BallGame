@@ -11,6 +11,8 @@ export class Shield {
     this.borderColor = "rgb(255, 255, 153)";
     this.lineWidth = 3;
     this.id = "Shield";
+    this.ready = true;
+    this.timer = 0;
     this.sizeTimer = 10000;
     this.lives = 10;
   }
@@ -49,9 +51,10 @@ export class Shield {
 }
 }
 
-export function activateShield(event) {
-  if (event.key === " " && game.player.shieldReady) {
-    game.player.shieldReady = false;
+export function handleSpaceDown(event) {
+  if (event.key === " " && game.shield.ready) {
+    game.player.keys.space = true;
+    game.shield.ready = false;
     game.player.shield = true;
 
 
@@ -73,6 +76,11 @@ export function activateShield(event) {
     if (game.player.keys.right) {
       game.shield.velocity.dx += game.player.velocity.dx - 100;
     }
+  }
+}
+export function handleSpaceUp(event) {
+  if (event.key === " ") {
+    game.player.keys.space = false;
   }
 }
 

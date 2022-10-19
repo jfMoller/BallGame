@@ -14,6 +14,7 @@ export class Keys {
     this.down = false;
     this.left = false;
     this.right = false;
+    this.space = false;
   }
 }
 export class Player extends Entity {
@@ -27,8 +28,6 @@ export class Player extends Entity {
     this.lives = 4;
     this.buff = new Buff();
     this.lineWidth = 1;
-    this.shieldTimer = 0;
-    this.shieldReady = true;
     this.shield = false;
   }
   draw() {

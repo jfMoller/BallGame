@@ -1,9 +1,9 @@
 import { game} from "./game.js";
 import {handleKeyDown, handleKeyUp} from "./event.js";
-import { activateShield } from "./shield.js";
-import { gameInterface } from "./interface.js";
+import { handleSpaceDown, handleSpaceUp } from "./shield.js";
 
-window.addEventListener("keydown", activateShield);
+window.addEventListener("keydown", handleSpaceDown);
+window.addEventListener("keyup", handleSpaceUp);
 window.addEventListener("keydown", handleKeyDown);
 window.addEventListener("keyup", handleKeyUp);
 

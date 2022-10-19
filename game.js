@@ -1,8 +1,8 @@
 import { Boost, boostEffect, spawnBoosts, stopBoostEffect } from "./boost.js";
 import { Enemy, spawnEnemies } from "./enemy.js";
-import { Position, Velocity } from "./entity.js";
+import { Position } from "./entity.js";
 import { Player } from "./player.js";
-import { Shield, shieldTimer } from "./shield.js";
+import { Shield } from "./shield.js";
 import { circlesCollide, isOutsideCanvas } from "./utility.js";
 import { gameInterface } from "./interface.js";
 
@@ -20,7 +20,8 @@ export class Game {
     this.context = context;
     this.entities = [
       new Player(new Position(halfWidth, halfHeight)),
-      new Shield(new Position(halfWidth, halfHeight))];
+      new Shield(new Position(halfWidth, halfHeight)),
+    ];
     this.player = this.entities[0];
     this.shield = this.entities[1];
 
@@ -31,9 +32,9 @@ export class Game {
     this.boostTime = 0;
 
     this.spawnEnemies = true;
-      this.enemySpawnRate = 500; //ms
+    this.enemySpawnRate = 500; //ms
     this.spawnBoosts = true;
-      this.boostSpawnRate = 5000; //ms
+    this.boostSpawnRate = 5000; //ms
   }
   start() {
     tick();
@@ -42,10 +43,9 @@ export class Game {
 
 export const game = new Game(canvas, context);
 
-
 let lastTick = Date.now();
 let boostTime = null;
-
+let shieldTime = null;
 
 function tick() {
   let currentTick = Date.now();
@@ -56,11 +56,10 @@ function tick() {
   //time elapsed since start
   game.tickTime += game.deltaTime;
 
-  
   //score, +1 point per second elapsed ingame
-  game.score = Math.floor((game.tickTime));
+  game.score = Math.floor(game.tickTime);
   //game interface
-  gameInterface(game.player.shieldReady, game.player.lives, game.score);
+  gameInterface(game.shield.ready, game.player.lives, game.score);
 
   //draws and moves all objects in game array
   for (let i = 0; i < game.entities.length; ++i) {
@@ -91,20 +90,46 @@ function tick() {
         }
       }
     }
-    shieldTimer(game);
 
     if (entity instanceof Boost) {
       let boost = entity;
 
       if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
-        boostTime = game.tickTime;
-        boostEffect(game, boost)
+        boostTime = game.tickTime; //create acces through game.
+        boostEffect(game, boost);
       }
     }
     if (game.tickTime - boostTime > 5) {
-    stopBoostEffect(game);
+      stopBoostEffect(game);
     }
+
+
+
+    if (game.player.keys.space) {
+      shieldTime = game.tickTime; //create acces through game. for loading bar in interface
+    }
+    if (game.tickTime - shieldTime > 10) { //when shield is ready in seconds
+      game.shield.ready = true;
+    }
+    
+      if ((game.tickTime - shieldTime) > 10) { //shrinking when respawned
+        if (game.shield.radius > 1) {
+        game.shield.radius -= 0.1;
+        if (game.shield.radius < 1) {
+          game.shield.radius = 100;
+        game.player.shield = false;
+      }
+      }
+      }
+    
+
+
+
+
+
+
+
   } //END OF FOOR LOOP
 
   if (game.player.lives === 0) {
@@ -115,14 +140,13 @@ function tick() {
   requestAnimationFrame(tick);
 }
 if (game.spawnEnemies) {
-setInterval(() => {
-  spawnEnemies(game);
-}, game.enemySpawnRate);
+  setInterval(() => {
+    spawnEnemies(game);
+  }, game.enemySpawnRate);
 }
 
 if (game.spawnBoosts) {
-setInterval(() => {
-  spawnBoosts(game);
-}, game.boostSpawnRate);
+  setInterval(() => {
+    spawnBoosts(game);
+  }, game.boostSpawnRate);
 }
-

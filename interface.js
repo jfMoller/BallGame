@@ -12,23 +12,23 @@ export function gameInterface(
 ) {
   //shield
 let status = shieldStatus;
-if (game.player.shieldTimer < (30000 * 1/4)) {
+if (game.shield.timer < (30000 * 1/4)) {
   status = "⬛️⬛️⬛️⬛️"
   }
-if (game.player.shieldTimer >= (30000 * 1/4) &&
-game.player.shieldTimer < (30000 * 2/4)) {
+if (game.shield.timer >= (30000 * 1/4) &&
+game.shield.timer < (30000 * 2/4)) {
 status = "🟩⬛️⬛️⬛️"
 }
-if (game.player.shieldTimer >= (30000 * 2/4) &&
-game.player.shieldTimer < (30000 * 3/4)) {
+if (game.shield.timer >= (30000 * 2/4) &&
+game.shield.timer < (30000 * 3/4)) {
 status = "🟩🟩⬛️⬛️"
 }
-if (game.player.shieldTimer >= (30000 * 3/4) &&
-  game.player.shieldTimer < (30000 * 4/4)) {
+if (game.shield.timer >= (30000 * 3/4) &&
+  game.shield.timer < (30000 * 4/4)) {
 status = "🟩🟩🟩⬛️"
 }
 
-else if (game.player.shieldReady) {
+else if (game.shield.ready) {
 status = "🟩🟩🟩🟩"
 }
 //health
