@@ -1,4 +1,4 @@
-import { Boost, boostEffect, spawnBoosts } from "./boost.js";
+import { Boost, spawnBoosts } from "./boost.js";
 import { Enemy, spawnEnemies } from "./enemy.js";
 import { Position } from "./entity.js";
 import { Player } from "./player.js";
@@ -18,9 +18,11 @@ export class Game {
   constructor(canvas, context) {
     this.canvas = canvas;
     this.context = context;
-    this.entities = [new Player(new Position(halfWidth, halfHeight))];
-    this.shield = new Shield(new Position(halfWidth, halfHeight));
+    this.entities = [
+      new Player(new Position(halfWidth, halfHeight)),
+      new Shield(new Position(halfWidth, halfHeight))];
     this.player = this.entities[0];
+    this.shield = this.entities[1];
     this.deltaTime = 0;
     this.score = 0;
     this.difficulty = 0;
@@ -77,23 +79,24 @@ function tick() {
         }
       }
     }
+    shieldTimer(game);
 
     if (entity instanceof Boost) {
       let boost = entity;
 
       if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
-        if (entity.type === "healing") {
+        if (entity.type === "healing" && game.player.lives < 5) {
           game.player.buff.healing = true;
-        } else if (entity.type === "speed") {
+        } else if (entity.type === "speed" && game.player.buff.speed !== true) {
           game.player.buff.speed = true;
-        } else if (entity.type === "invunerable") {
+        } else if (entity.type === "invunerable" && game.player.buff.invunerable !== true) {
           game.player.buff.invunerable = true;
         }
       }
-      boostEffect(game);
+
     }
-    shieldTimer(game);
+  
   }
 
   if (game.player.lives === 0) {
@@ -109,4 +112,4 @@ setInterval(() => {
 
 setInterval(() => {
   spawnBoosts(game);
-}, 5000);
+}, 3000);

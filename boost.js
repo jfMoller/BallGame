@@ -36,9 +36,31 @@ export class Boost extends Entity {
       context.fillText("🎭", this.position.x, this.position.y);
     }
   }
-  tick() {}
+  tick() {
+    if (game.player.buff.healing) {
+      if (game.player.lives < 5) {
+        game.player.lives++;
+      }
+      game.player.buff.healing = false;
+    }
+    if (game.player.buff.speed) {
+      game.player.borderColor = "rgba(39, 245, 237)";
+      game.player.lineWidth = 10;
+      game.player.velocity = new Velocity(650, 650)
+      setTimeout(function () {
+        game.player.buff.speed = false;
+        game.player.borderColor = "black";
+        game.player.lineWidth = 1;
+        game.player.velocity = new Velocity(450, 450)
+      }, 5000);
+    }
+    if (game.player.buff.invunerable) {
+      setTimeout(function () {
+        game.player.buff.invunerable = false;
+      }, 5000);
+    }
+  }
 
-  spawn() {}
 }
 export function spawnBoosts(game) {
   let randomPositionX = generatesRanNumBetween(width - 60, 0);
@@ -63,29 +85,4 @@ export function spawnBoosts(game) {
     ),
   ];
   game.entities.push(boostTypes[randomBoost]);
-}
-
-export function boostEffect(game) {
-  if (game.player.buff.healing) {
-    if (game.player.lives < 5) {
-      game.player.lives++;
-    }
-    game.player.buff.healing = false;
-  }
-  if (game.player.buff.speed) {
-    game.player.velocity = new Velocity(650, 650)
-    game.player.borderColor = "rgba(39, 245, 237)";
-    game.player.lineWidth = 10;
-    setTimeout(function () {
-      game.player.buff.speed = false;
-      game.player.borderColor = "black";
-      game.player.lineWidth = 1;
-      game.player.velocity = new Velocity(450, 450)
-    }, 5000);
-  }
-  if (game.player.buff.invunerable) {
-    setTimeout(function () {
-      game.player.buff.invunerable = false;
-    }, 5000);
-  }
 }

@@ -1,21 +1,22 @@
 import { Entity, Position, Velocity } from "./entity.js";
 import { Player } from "./player.js";
-import { context, game, width, height } from "./game.js";
+import { context, game, width, height, halfWidth, halfHeight } from "./game.js";
 
 export class Shield {
   constructor(position) {
     this.position = position;
     this.velocity = new Velocity(0, 0);
     this.radius = 100;
-    this.color = "rgba(255, 239, 98, 0.02)";
-    this.borderColor = "yellow";
-    this.lineWidth = 1;
+    this.color = "rgba(255, 255, 153, 0.3)";
+    this.borderColor = "rgb(255, 255, 153)";
+    this.lineWidth = 3;
     this.id = "Shield";
     this.sizeTimer = 10000;
     this.lives = 10;
   }
 
   draw() {
+    if (game.player.shield) {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
@@ -25,13 +26,13 @@ export class Shield {
     context.fill();
     context.closePath();
   }
-
-  tick(game) {
-    this.position.x += this.velocity.dx * game.deltaTime;
-    this.position.y += this.velocity.dy * game.deltaTime;
   }
 
-  bounce() {
+  tick(game) {
+    if (game.player.shield) {
+    this.position.x += this.velocity.dx * game.deltaTime;
+    this.position.y += this.velocity.dy * game.deltaTime;
+
     if (
       this.position.x > width - this.radius ||
       this.position.x <= this.radius
@@ -46,30 +47,31 @@ export class Shield {
     }
   }
 }
+}
 
 export function activateShield(event) {
   if (event.key === " " && game.player.shieldReady) {
     game.player.shieldReady = false;
     game.player.shield = true;
 
-    game.shield.position.x = 0;
-    game.shield.position.y = 0;
+
     game.shield.velocity.dx = 0;
     game.shield.velocity.dy = 0;
 
     game.shield.position.x = game.player.position.x;
     game.shield.position.y = game.player.position.y;
+
     if (game.player.keys.up) {
-      game.shield.velocity.dy -= game.player.velocity.dy * game.deltaTime;
+      game.shield.velocity.dy -= game.player.velocity.dy - 100;
     }
     if (game.player.keys.down) {
-      game.shield.velocity.dy += game.player.velocity.dy * game.deltaTime;
+      game.shield.velocity.dy += game.player.velocity.dy - 100;
     }
     if (game.player.keys.left) {
-      game.shield.velocity.dx -= game.player.velocity.dx * game.deltaTime;
+      game.shield.velocity.dx -= game.player.velocity.dx - 100;
     }
     if (game.player.keys.right) {
-      game.shield.velocity.dx += game.player.velocity.dx * game.deltaTime;
+      game.shield.velocity.dx += game.player.velocity.dx - 100;
     }
   }
 }
@@ -87,9 +89,6 @@ export function shieldTimer(game) {
   //when shield is activated
   if (game.player.shield) {
     game.shield.sizeTimer--;
-    game.shield.draw();
-    game.shield.tick(game);
-    game.shield.bounce();
 
     //to shrink shield size before it disappears
     if (game.shield.sizeTimer < 1000) {
