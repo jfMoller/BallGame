@@ -12,7 +12,6 @@ export class Boost extends Entity {
     this.borderColor = "black";
     this.type = type;
     this.tickTime = null;
-    this.collisionTime = null;
   }
   draw() {
     context.beginPath();
@@ -39,8 +38,33 @@ export class Boost extends Entity {
       context.fillText("🎭", this.position.x, this.position.y);
     }
   }
-  tick(game) {
-
+  isActive(game) {
+    if (this.type === "healing" && game.player.lives < 5) {
+      game.player.buff.healing = true;
+      game.player.lives++;
+    } else if (this.type === "speed" && game.player.buff.speed !== true) {
+      game.player.buff.speed = true;
+      if (game.player.buff.speed) {
+        game.player.borderColor = "rgba(39, 245, 237)";
+        game.player.lineWidth = 10;
+        game.player.velocity = new Velocity(650, 650);
+      }
+    } else if (
+      this.type === "invunerable" &&
+      game.player.buff.invunerable !== true
+    ) {
+      game.player.buff.invunerable = true;
+    }
+  }
+  isInactive(game){
+    if (game.player.buff.speed) {
+      game.player.buff.speed = false;
+      game.player.borderColor = "black";
+      game.player.lineWidth = 1;
+      game.player.velocity = new Velocity(450, 450);
+    } else if (game.player.buff.invunerable) {
+      game.player.buff.invunerable = false;
+    } 
   }
 }
 export function spawnBoosts(game) {

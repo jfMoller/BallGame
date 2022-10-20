@@ -37,24 +37,16 @@ export class Shield {
   }
 
   tick(game) {
+    this.isActivated();
+    this.isRecharging();
+
     if (game.player.shield) {
-      this.position.x += this.velocity.dx * game.deltaTime;
-      this.position.y += this.velocity.dy * game.deltaTime;
-
-      if (
-        this.position.x > width - this.radius ||
-        this.position.x <= this.radius
-      ) {
-        this.velocity.dx *= -1;
-      }
-      if (
-        this.position.y < this.radius ||
-        this.position.y > height - this.radius
-      ) {
-        this.velocity.dy *= -1;
-      }
+      this.moves();
+      this.bounces();
     }
-
+  }
+  isActivated() {
+    //saves the time of which user activated shield
     if (game.player.keys.space) {
       game.shield.TickTime = game.tickTime;
     }
@@ -70,8 +62,29 @@ export class Shield {
           game.shield.radius = 100;
         }
       }
-    } else if (game.tickTime - game.shield.TickTime > this.readyIn) {
+    }
+  }
+  isRecharging() {
+    if (game.tickTime - game.shield.TickTime > this.readyIn) {
       game.shield.ready = true;
+    }
+  }
+  moves() {
+    this.position.x += this.velocity.dx * game.deltaTime;
+    this.position.y += this.velocity.dy * game.deltaTime;
+  }
+  bounces() {
+    if (
+      this.position.x > width - this.radius ||
+      this.position.x <= this.radius
+    ) {
+      this.velocity.dx *= -1;
+    }
+    if (
+      this.position.y < this.radius ||
+      this.position.y > height - this.radius
+    ) {
+      this.velocity.dy *= -1;
     }
   }
 }

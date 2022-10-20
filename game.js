@@ -24,7 +24,6 @@ export class Game {
     ];
     this.player = this.entities[0];
     this.shield = this.entities[1];
-    this.boost = null;
 
     this.deltaTime = 0;
     this.score = 0;
@@ -51,6 +50,7 @@ function tick() {
   game.deltaTime = (currentTick - lastTick) / 1000;
   lastTick = currentTick;
   context.clearRect(0, 0, width, height);
+
   //time elapsed since start
   game.tickTime += game.deltaTime;
 
@@ -58,7 +58,7 @@ function tick() {
   game.score = Math.floor(game.tickTime);
 
   //game interface prototype
-  gameInterface(game.shield.ready, game.player.lives, game.score);
+  gameInterface(game);
 
   //draws and moves all objects in game array
   for (let i = 0; i < game.entities.length; ++i) {
@@ -73,7 +73,7 @@ function tick() {
     if (entity instanceof Enemy) {
       let enemy = entity;
 
-      /* if (
+      if (
         circlesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
@@ -87,7 +87,7 @@ function tick() {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
-      } */
+      }
     }
 
     if (entity instanceof Boost) {
@@ -96,11 +96,11 @@ function tick() {
       if (circlesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
         boostTickTime = game.tickTime;
-        boostEffect(game, boost);
+        boost.isActive(game);
       }
-    }
-    if (game.tickTime - boostTickTime > 5) {
-      stopBoostEffect(game);
+      if (game.tickTime - boostTickTime > 5) {
+        boost.isInactive(game);
+      }
     }
   } //END OF FOOR LOOP
 
@@ -109,7 +109,7 @@ function tick() {
     return;
   }
 
-  requestAnimationFrame(tick);
+requestAnimationFrame(tick);
 }
 if (game.spawnEnemies) {
   setInterval(() => {

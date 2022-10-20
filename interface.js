@@ -1,48 +1,48 @@
-import { game, width, height } from "./game.js";
+import { game, context, width, height } from "./game.js";
 import { Player } from "./player.js";
 
 const textTop1 = document.getElementById("topUiLeft");
 const textTop2 = document.getElementById("topUiRight");
 const textBottom = document.getElementById("bottomUi");
 
-export function gameInterface(shieldStatus, healthStatus, scoreStatus) {
+export function gameInterface(game) {
   //shield
-  let status = shieldStatus;
+  let shieldStatus = null
   if (game.shield.ready === false) {
-    status = "⬛️⬛️⬛️⬛️";
+    shieldStatus = "⬛️⬛️⬛️⬛️";
   }
   if (
     game.tickTime - game.shield.TickTime > (game.shield.readyIn * 1 / 4) &&
     game.tickTime - game.shield.TickTime < (game.shield.readyIn * 2 / 4)
   ) {
-    status = "🟩⬛️⬛️⬛️";
+    shieldStatus = "🟩⬛️⬛️⬛️";
   }
   if (
     game.tickTime - game.shield.TickTime > (game.shield.readyIn * 2 / 4) &&
     game.tickTime - game.shield.TickTime < (game.shield.readyIn * 3 / 4)
   ) {
-    status = "🟩🟩⬛️⬛️";
+    shieldStatus = "🟩🟩⬛️⬛️";
   }
   if (
     game.tickTime - game.shield.TickTime > (game.shield.readyIn * 3 / 4) &&
     game.tickTime - game.shield.TickTime < (game.shield.readyIn * 4 / 4)
   ) {
-    status = "🟩🟩🟩⬛️";
+    shieldStatus = "🟩🟩🟩⬛️";
   } 
   if (game.shield.ready) {
-    status = "🟩🟩🟩🟩";
+    shieldStatus = "🟩🟩🟩🟩";
   }
   //health
-  let status2 = "";
-  for (let n = 0; n < healthStatus; ++n) {
-    status2 += "❤️";
+  let healthStatus = "";
+  for (let n = 0; n < game.player.lives; ++n) {
+    healthStatus += "❤️";
   }
 
-  textBottom.innerText = "Score: " + scoreStatus;
+  textBottom.innerText = "Score: " + game.score;
 
-  textTop1.innerText = "Shield:" + status;
+  textTop1.innerText = "Shield:" + shieldStatus;
 
-  textTop2.innerText = "Health: " + status2;
+  textTop2.innerText = "Health: " + healthStatus;
 
   textTop1.style.fontSize = "40px";
   textTop1.style.textAlign = "center";

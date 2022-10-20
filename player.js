@@ -1,5 +1,5 @@
 import { Entity, Velocity } from "./entity.js";
-import { context, width, halfWidth, height, halfHeight } from "./game.js";
+import { game, context, width, halfWidth, height, halfHeight } from "./game.js";
 
 export class Buff {
   constructor() {
@@ -44,11 +44,11 @@ export class Player extends Entity {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-  
+
     if (this.buff.invunerable) {
       context.fillText("🥸", this.position.x, this.position.y);
     }
-  
+
     if (this.lives >= 5 && this.buff.invunerable !== true) {
       context.fillText("😁", this.position.x, this.position.y);
     }
@@ -68,23 +68,23 @@ export class Player extends Entity {
       context.fillText("😵", this.position.x, this.position.y);
     }
   }
-  tick(game) {
+  tick() {
+    this.moves();
+    this.staysInsideCanvas();
+  }
+  moves() {
     if (this.keys.up && this.position.y > this.radius) {
       this.position.y -= this.velocity.dy * game.deltaTime;
     }
-    if (
-      this.keys.down &&
-      this.position.y < height - this.radius
-    ) {
+  }
+  staysInsideCanvas() {
+    if (this.keys.down && this.position.y < height - this.radius) {
       this.position.y += this.velocity.dy * game.deltaTime;
     }
     if (this.keys.left && this.position.x > this.radius) {
       this.position.x -= this.velocity.dx * game.deltaTime;
     }
-    if (
-      this.keys.right &&
-      this.position.x < width - this.radius
-    ) {
+    if (this.keys.right && this.position.x < width - this.radius) {
       this.position.x += this.velocity.dx * game.deltaTime;
     }
   }
