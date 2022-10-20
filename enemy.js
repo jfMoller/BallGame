@@ -35,6 +35,24 @@ export class Enemy extends Entity {
   tick(game) {
     this.position.x += this.velocity.dx * game.deltaTime;
     this.position.y += this.velocity.dy * game.deltaTime;
+
+    if (
+      circlesCollide(game.player, this, 0) &&
+      game.player.buff.invunerable !== true
+    ) {
+      game.entities.splice((game.entities.indexOf(this)), 1);
+      game.player.lives--;
+    }
+    if (game.player.shield) {
+      if (circlesCollide(game.shield, this, -20)) {
+        game.entities.splice(game.entities.indexOf(this), 1);
+      } else if (circlesCollide(game.shield, this, 0)) {
+        this.velocity.dx *= -1;
+        this.velocity.dy *= -1;
+      }
+    }
+
+
   }
 }
 export function spawnEnemies(game) {

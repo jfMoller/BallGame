@@ -12,9 +12,9 @@ export class Shield {
     this.lineWidth = 3;
     this.id = "Shield";
     this.ready = true;
-    this.readyRate = 10;
+    this.readyIn = 28; //sec, shield can then be activated
+    this.removeIn = 8; //sec, shield lasts for this.removeIn * 0.8 before shrinking
     this.tickTime = null;
-   
   }
 
   draw() {
@@ -58,51 +58,20 @@ export class Shield {
     if (game.player.keys.space) {
       game.shield.TickTime = game.tickTime;
     }
-    if (game.tickTime - game.shield.TickTime > 10) {
-      game.shield.ready = true;
-
-      if (game.tickTime - game.shield.TickTime > 8 && game.player.shield) {
-        //shrinking when respawned
-        if (game.shield.radius > 1) {
-          game.shield.radius -= 0.8;
-          if (game.shield.radius <= 1) {
-            game.player.shield = false;
-            game.shield.radius = 100;
-          }
+    if (
+      game.tickTime - game.shield.TickTime > this.removeIn &&
+      game.player.shield
+    ) {
+      //shrinking
+      if (game.shield.radius > 1) {
+        game.shield.radius -= 0.8;
+        if (game.shield.radius <= 1) {
+          game.player.shield = false;
+          game.shield.radius = 100;
         }
       }
+    } else if (game.tickTime - game.shield.TickTime > this.readyIn) {
+      game.shield.ready = true;
     }
-  }
-}
-
-export function handleSpaceDown(event) {
-  if (event.key === " " && game.shield.ready && game.shield.radius === 100) {
-    game.player.keys.space = true;
-    game.shield.ready = false;
-    game.player.shield = true;
-
-    game.shield.velocity.dx = 0;
-    game.shield.velocity.dy = 0;
-
-    game.shield.position.x = game.player.position.x;
-    game.shield.position.y = game.player.position.y;
-
-    if (game.player.keys.up) {
-      game.shield.velocity.dy -= game.player.velocity.dy - 100;
-    }
-    if (game.player.keys.down) {
-      game.shield.velocity.dy += game.player.velocity.dy - 100;
-    }
-    if (game.player.keys.left) {
-      game.shield.velocity.dx -= game.player.velocity.dx - 100;
-    }
-    if (game.player.keys.right) {
-      game.shield.velocity.dx += game.player.velocity.dx - 100;
-    }
-  }
-}
-export function handleSpaceUp(event) {
-  if (event.key === " ") {
-    game.player.keys.space = false;
   }
 }

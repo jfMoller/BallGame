@@ -24,17 +24,17 @@ export class Game {
     ];
     this.player = this.entities[0];
     this.shield = this.entities[1];
+    this.boost = null;
 
     this.deltaTime = 0;
     this.score = 0;
-    this.difficulty = 0;
     this.tickTime = 0;
     this.boostTime = 0;
 
     this.spawnEnemies = true;
     this.enemySpawnRate = 500; //ms
     this.spawnBoosts = true;
-    this.boostSpawnRate = 5000; //ms
+    this.boostSpawnRate = 2000; //ms
   }
   start() {
     tick();
@@ -45,20 +45,19 @@ export const game = new Game(canvas, context);
 
 let lastTick = Date.now();
 let boostTickTime = null;
-let shieldTickTime = null;
 
 function tick() {
   let currentTick = Date.now();
   game.deltaTime = (currentTick - lastTick) / 1000;
   lastTick = currentTick;
   context.clearRect(0, 0, width, height);
-
   //time elapsed since start
   game.tickTime += game.deltaTime;
 
   //score, +1 point per second elapsed ingame
   game.score = Math.floor(game.tickTime);
-  //game interface
+
+  //game interface prototype
   gameInterface(game.shield.ready, game.player.lives, game.score);
 
   //draws and moves all objects in game array
@@ -74,7 +73,7 @@ function tick() {
     if (entity instanceof Enemy) {
       let enemy = entity;
 
-      if (
+      /* if (
         circlesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
@@ -88,7 +87,7 @@ function tick() {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
-      }
+      } */
     }
 
     if (entity instanceof Boost) {
@@ -103,7 +102,6 @@ function tick() {
     if (game.tickTime - boostTickTime > 5) {
       stopBoostEffect(game);
     }
-
   } //END OF FOOR LOOP
 
   if (game.player.lives === 0) {

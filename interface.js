@@ -12,20 +12,20 @@ export function gameInterface(shieldStatus, healthStatus, scoreStatus) {
     status = "⬛️⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (10 * 1 / 4) &&
-    game.tickTime - game.shield.TickTime < (10 * 2 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 1 / 4) &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 2 / 4)
   ) {
     status = "🟩⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (10 * 2 / 4) &&
-    game.tickTime - game.shield.TickTime < (10 * 3 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 2 / 4) &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 3 / 4)
   ) {
     status = "🟩🟩⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (10 * 3 / 4) &&
-    game.tickTime - game.shield.TickTime < (10 * 4 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 3 / 4) &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 4 / 4)
   ) {
     status = "🟩🟩🟩⬛️";
   } 

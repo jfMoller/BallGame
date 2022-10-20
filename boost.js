@@ -1,7 +1,8 @@
 import { Entity, Position, Velocity } from "./entity.js";
 import { context, width, halfWidth, height, halfHeight } from "./game.js";
-import { generatesRanNumBetween } from "./utility.js";
+import { generatesRanNumBetween, circlesCollide } from "./utility.js";
 import { game } from "./game.js";
+import { gameInterface } from "./interface.js";
 
 export class Boost extends Entity {
   constructor(position, color, type) {
@@ -11,6 +12,7 @@ export class Boost extends Entity {
     this.borderColor = "black";
     this.type = type;
     this.tickTime = null;
+    this.collisionTime = null;
   }
   draw() {
     context.beginPath();
@@ -37,7 +39,9 @@ export class Boost extends Entity {
       context.fillText("🎭", this.position.x, this.position.y);
     }
   }
-  tick(game) {}
+  tick(game) {
+
+  }
 }
 export function spawnBoosts(game) {
   let randomPositionX = generatesRanNumBetween(width - 60, 0);
