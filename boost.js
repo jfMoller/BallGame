@@ -5,7 +5,7 @@ import { generatesRanNumBetween } from "./utility.js";
 export class Boost extends Entity {
   constructor(position, color, type) {
     super(position);
-    this.radius = 23;
+    this.radius = 15;
     this.color = color;
     this.borderColor = "black";
     this.type = type;

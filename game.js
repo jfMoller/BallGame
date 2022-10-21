@@ -30,11 +30,11 @@ export class Game {
     this.tickTime = 0;
     this.boostTime = 0;
 
-    this.spawnEnemies = false;
+    this.spawnEnemies = true;
     this.enemySpawnRate = 500; //ms
     this.spawnBoosts = true;
-    this.boostSpawnRate = 2000; //ms
-    this.boostDuration = 4 //sec
+    this.boostSpawnRate = 10000; //ms
+    this.boostDuration = 4; //sec
   }
   start() {
     tick();
@@ -74,7 +74,8 @@ function tick() {
     if (entity instanceof Enemy) {
       let enemy = entity;
 
-      if (theseCirclesCollide(game.player, enemy, 0) &&
+      if (
+        theseCirclesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
         game.entities.splice(i--, 1);
@@ -84,8 +85,8 @@ function tick() {
       if (game.player.shield) {
         if (theseCirclesCollide(game.shield, enemy, -20)) {
           game.entities.splice(i--, 1);
-        
-        } else if (theseCirclesCollide(game.shield, enemy, 0)) {
+        }
+        if (theseCirclesCollide(game.shield, enemy, 0)) {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
@@ -95,12 +96,16 @@ function tick() {
     if (entity instanceof Boost) {
       let boost = entity;
 
+      if (theseCirclesCollide(game.shield, boost, 0)) {
+        game.entities.splice(i--, 1);
+      }
+
       if (theseCirclesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
         boostTickTime = game.tickTime;
         boost.isActive(game);
       }
-      
+
       if (game.tickTime - boostTickTime > game.boostDuration) {
         boost.isInactive(game);
       }
@@ -111,13 +116,12 @@ function tick() {
     alert("Game over!");
     return;
   }
-
   requestAnimationFrame(tick);
 }
 if (game.spawnEnemies) {
   setInterval(() => {
     spawnEnemies(game);
-  }, game.enemySpawnRate);
+  }, 500);
 }
 
 if (game.spawnBoosts) {

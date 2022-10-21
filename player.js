@@ -40,7 +40,7 @@ export class Player extends Entity {
     context.fill();
     context.closePath();
 
-    context.font = "48px serif";
+    context.font = "40px serif";
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
@@ -70,14 +70,11 @@ export class Player extends Entity {
   }
   tick() {
     this.moves();
-    this.staysInsideCanvas();
   }
   moves() {
     if (this.keys.up && this.position.y > this.radius) {
       this.position.y -= this.velocity.dy * game.deltaTime;
     }
-  }
-  staysInsideCanvas() {
     if (this.keys.down && this.position.y < height - this.radius) {
       this.position.y += this.velocity.dy * game.deltaTime;
     }

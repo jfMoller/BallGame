@@ -71,7 +71,23 @@ export class Shield {
   moves() {
     this.position.x += this.velocity.dx * game.deltaTime;
     this.position.y += this.velocity.dy * game.deltaTime;
+
+    //if shields radius exceeds width or height of the canvas when spawned
+    if (this.position.x < this.radius) {
+      this.position.x = this.radius;
+    }
+    if (this.position.x + this.radius > width) {
+      this.position.x = width - this.radius + 1;
+    }
+    if (this.position.y + this.radius > height) {
+      this.position.y = height - this.radius + 1;
+    }
+    if (this.position.y < this.radius) {
+      this.position.y = this.radius - 1;
+    }
+    
   }
+   
   bounces() {
     if (
       this.position.x > width - this.radius ||

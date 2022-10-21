@@ -61,5 +61,24 @@ export function spawnEnemies(game) {
       new Velocity(randomVelocity, -100)
     ),
   ];
+  if (game.score < 10){
   game.entities.push(enemyDirection[randomDirection]);
+}
+if (game.score >= 10 && game.score < 20){
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+}
+if (game.score >= 20) {
+  game.entities.push(enemyDirection[randomDirection]);
+}
+if (game.score >= 25) {
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+  game.entities.push(enemyDirection[randomDirection]);
+}
+
+
 }
