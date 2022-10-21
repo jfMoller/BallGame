@@ -1,8 +1,7 @@
 import { Entity, Position, Velocity } from "./entity.js";
 import { context, width, height, game } from "./game.js";
-import { Player } from "./player.js";
 import { generatesRanNumBetween } from "./utility.js";
-import { circlesCollide } from "./utility.js";
+import { theseCirclesCollide } from "./utility.js";
 
 export class Enemy extends Entity {
   constructor(position, velocity) {
@@ -28,7 +27,7 @@ export class Enemy extends Entity {
     context.textBaseline = "middle";
     context.fillText("👿", this.position.x, this.position.y);
 
-    if (circlesCollide(game.player, this, 100)) {
+    if (theseCirclesCollide(game.player, this, 100)) {
       context.fillText("😈", this.position.x, this.position.y);
     }
   }

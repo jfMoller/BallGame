@@ -1,6 +1,5 @@
-import { Entity, Position, Velocity } from "./entity.js";
-import { Player } from "./player.js";
-import { context, game, width, height, halfWidth, halfHeight } from "./game.js";
+import { Velocity } from "./entity.js";
+import { context, game, width, height } from "./game.js";
 
 export class Shield {
   constructor(position) {

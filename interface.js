@@ -1,36 +1,33 @@
-import { game, context, width, height } from "./game.js";
-import { Player } from "./player.js";
-
 const textTop1 = document.getElementById("topUiLeft");
 const textTop2 = document.getElementById("topUiRight");
 const textBottom = document.getElementById("bottomUi");
 
 export function gameInterface(game) {
   //shield
-  let shieldStatus = null
+  let shieldStatus = null;
   if (game.shield.ready === false) {
-    shieldStatus = "⬛️⬛️⬛️⬛️";
+    shieldStatus = " ⬛️⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 1 / 4) &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 2 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 1) / 4 &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 2) / 4
   ) {
-    shieldStatus = "🟩⬛️⬛️⬛️";
+    shieldStatus = " 🟩⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 2 / 4) &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 3 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 2) / 4 &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 3) / 4
   ) {
-    shieldStatus = "🟩🟩⬛️⬛️";
+    shieldStatus = " 🟩🟩⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 3 / 4) &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 4 / 4)
+    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 3) / 4 &&
+    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 4) / 4
   ) {
-    shieldStatus = "🟩🟩🟩⬛️";
-  } 
+    shieldStatus = " 🟩🟩🟩⬛️";
+  }
   if (game.shield.ready) {
-    shieldStatus = "🟩🟩🟩🟩";
+    shieldStatus = " 🟩🟩🟩🟩";
   }
   //health
   let healthStatus = "";
@@ -38,24 +35,32 @@ export function gameInterface(game) {
     healthStatus += "❤️";
   }
 
-  textBottom.innerText = "Score: " + game.score;
+  //removes a zero from score every time a 0 is added in game.score
+  let scoreStatus = ["0", "0", "0", "0", game.score];
+  let scoreArr = [10, 100, 1000, 10000, 99999];
 
+  for (let n = 0; n < game.score; ++n) {
+    for (let i = 0; i < scoreArr.length; i++) {
+      if (n + 1 === scoreArr[i]) {
+        scoreStatus.splice(0, 1);
+      }
+      if (game.score === 99999) {
+        break;
+      }
+    }
+  }
+
+  textBottom.innerText = "Score: " + scoreStatus.join("");
+  styling(textBottom);
   textTop1.innerText = "Shield:" + shieldStatus;
-
+  styling(textTop1);
   textTop2.innerText = "Health: " + healthStatus;
+  styling(textTop2);
 
-  textTop1.style.fontSize = "40px";
-  textTop1.style.textAlign = "center";
-  textTop1.style.tex;
-  textTop1.style.textBaseline = "center";
-
-  textTop2.style.fontSize = "40px";
-  textTop2.style.textAlign = "center";
-  textTop2.style.tex;
-  textTop2.style.textBaseline = "center";
-
-  textBottom.style.fontSize = "40px";
-  textBottom.style.textAlign = "center";
-  textBottom.style.tex;
-  textBottom.style.textBaseline = "center";
+  function styling(element) {
+    element.style.fontSize = "40px";
+    element.style.textAlign = "center";
+    element.style.tex;
+    element.style.textBaseline = "center";
+  }
 }

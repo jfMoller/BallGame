@@ -1,3 +1,3 @@
 # Ballgame_OOP-variant
-#OOP practice; focusing on modules, inheritance and polymorphism
-#currently adding prototype UI
+#game project as OOP practice; focusing on modules, inheritance and polymorphism
+#currently using a prototype UI

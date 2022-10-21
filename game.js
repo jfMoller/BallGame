@@ -1,9 +1,9 @@
-import { Boost, boostEffect, spawnBoosts, stopBoostEffect } from "./boost.js";
+import { Boost, spawnBoosts } from "./boost.js";
 import { Enemy, spawnEnemies } from "./enemy.js";
 import { Position } from "./entity.js";
 import { Player } from "./player.js";
 import { Shield } from "./shield.js";
-import { circlesCollide, isOutsideCanvas } from "./utility.js";
+import { theseCirclesCollide, isOutsideCanvas } from "./utility.js";
 import { gameInterface } from "./interface.js";
 
 export const canvas = document.getElementById("canvas");
@@ -30,10 +30,11 @@ export class Game {
     this.tickTime = 0;
     this.boostTime = 0;
 
-    this.spawnEnemies = true;
+    this.spawnEnemies = false;
     this.enemySpawnRate = 500; //ms
     this.spawnBoosts = true;
     this.boostSpawnRate = 2000; //ms
+    this.boostDuration = 4 //sec
   }
   start() {
     tick();
@@ -51,16 +52,16 @@ function tick() {
   lastTick = currentTick;
   context.clearRect(0, 0, width, height);
 
-  //time elapsed since start
+  //total ticktime
   game.tickTime += game.deltaTime;
 
-  //score, +1 point per second elapsed ingame
+  //score++ if every full second of ticktime
   game.score = Math.floor(game.tickTime);
 
   //game interface prototype
   gameInterface(game);
 
-  //draws and moves all objects in game array
+  //draws all objects in game array, moves all objects except boosts (stationary after spawn)
   for (let i = 0; i < game.entities.length; ++i) {
     let entity = game.entities[i];
     entity.tick(game);
@@ -73,17 +74,18 @@ function tick() {
     if (entity instanceof Enemy) {
       let enemy = entity;
 
-      if (
-        circlesCollide(game.player, enemy, 0) &&
+      if (theseCirclesCollide(game.player, enemy, 0) &&
         game.player.buff.invunerable !== true
       ) {
         game.entities.splice(i--, 1);
         game.player.lives--;
       }
+
       if (game.player.shield) {
-        if (circlesCollide(game.shield, enemy, -20)) {
+        if (theseCirclesCollide(game.shield, enemy, -20)) {
           game.entities.splice(i--, 1);
-        } else if (circlesCollide(game.shield, enemy, 0)) {
+        
+        } else if (theseCirclesCollide(game.shield, enemy, 0)) {
           enemy.velocity.dx *= -1;
           enemy.velocity.dy *= -1;
         }
@@ -93,23 +95,24 @@ function tick() {
     if (entity instanceof Boost) {
       let boost = entity;
 
-      if (circlesCollide(game.player, boost, 0)) {
+      if (theseCirclesCollide(game.player, boost, 0)) {
         game.entities.splice(i--, 1);
         boostTickTime = game.tickTime;
         boost.isActive(game);
       }
-      if (game.tickTime - boostTickTime > 5) {
+      
+      if (game.tickTime - boostTickTime > game.boostDuration) {
         boost.isInactive(game);
       }
     }
-  } //END OF FOOR LOOP
+  } //<--- end of for loop
 
   if (game.player.lives === 0) {
     alert("Game over!");
     return;
   }
 
-requestAnimationFrame(tick);
+  requestAnimationFrame(tick);
 }
 if (game.spawnEnemies) {
   setInterval(() => {

@@ -1,20 +1,19 @@
 <html>
   <head>
     <style>
-     
+      .flexbox {
+        display: flex;
+        flex-direction: column;
+        align-self: center;
+        justify-content: center;
+      }
       .interface {
         width: 1400;
-        height: 108;
+        height: 110;
         background-color: rgba(201, 203, 211, 0.895);
       }
-      #topUiLeft {
-        text-align: left;
-      }
-      #topUiLeft {
-        text-align: right;
-      }
       #bottomUi {
-        height: 48px; 
+        height: 48px;
       }
       #canvas_container {
         width: 1400;
@@ -24,16 +23,20 @@
     </style>
   </head>
   <body>
-    <div class="interface">
-    <div id="topUiLeft"></div>
-    <div id="topUiRight"></div>
-    </div>
-    <div class="center-screen">
-      <div id="canvas_container">
-        <canvas id="canvas" width="1400px" height="900px"> </canvas>
-        <script type="module" src="main.js"></script>
+    <div class="flexbox">
+      <div class="interface">
+        <div id="top">
+          <div id="topUiLeft"></div>
+          <div id="topUiRight"></div>
+        </div>
       </div>
-      <div class="interface" id="bottomUi"></div>
+      <div class="center-screen">
+        <div id="canvas_container">
+          <canvas id="canvas" width="1400px" height="900px"> </canvas>
+          <script type="module" src="main.js"></script>
+        </div>
+        <div class="interface" id="bottomUi"></div>
+      </div>
     </div>
   </body>
 </html>

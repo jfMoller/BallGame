@@ -1,5 +1,5 @@
 import { Entity, Velocity } from "./entity.js";
-import { game, context, width, halfWidth, height, halfHeight } from "./game.js";
+import { game, context, width, height } from "./game.js";
 
 export class Buff {
   constructor() {

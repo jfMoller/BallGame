@@ -1,13 +1,11 @@
 import { Entity, Position, Velocity } from "./entity.js";
-import { context, width, halfWidth, height, halfHeight } from "./game.js";
-import { generatesRanNumBetween, circlesCollide } from "./utility.js";
-import { game } from "./game.js";
-import { gameInterface } from "./interface.js";
+import { context, width, height } from "./game.js";
+import { generatesRanNumBetween } from "./utility.js";
 
 export class Boost extends Entity {
   constructor(position, color, type) {
     super(position);
-    this.radius = 10;
+    this.radius = 23;
     this.color = color;
     this.borderColor = "black";
     this.type = type;
@@ -42,21 +40,21 @@ export class Boost extends Entity {
     if (this.type === "healing" && game.player.lives < 5) {
       game.player.buff.healing = true;
       game.player.lives++;
-    } else if (this.type === "speed" && game.player.buff.speed !== true) {
+    }
+    if (this.type === "speed" && game.player.buff.speed !== true) {
       game.player.buff.speed = true;
-      if (game.player.buff.speed) {
-        game.player.borderColor = "rgba(39, 245, 237)";
-        game.player.lineWidth = 10;
-        game.player.velocity = new Velocity(650, 650);
+
+    if (game.player.buff.speed) {
+      game.player.borderColor = "rgba(39, 245, 237)";
+      game.player.lineWidth = 10;
+      game.player.velocity = new Velocity(650, 650);
       }
-    } else if (
-      this.type === "invunerable" &&
-      game.player.buff.invunerable !== true
-    ) {
+    }
+    if (this.type === "invunerable" && game.player.buff.invunerable !== true) {
       game.player.buff.invunerable = true;
     }
   }
-  isInactive(game){
+  isInactive(game) {
     if (game.player.buff.speed) {
       game.player.buff.speed = false;
       game.player.borderColor = "black";
@@ -64,12 +62,12 @@ export class Boost extends Entity {
       game.player.velocity = new Velocity(450, 450);
     } else if (game.player.buff.invunerable) {
       game.player.buff.invunerable = false;
-    } 
+    }
   }
 }
 export function spawnBoosts(game) {
-  let randomPositionX = generatesRanNumBetween(width - 60, 0);
-  let randomPositionY = generatesRanNumBetween(height - 60, 0);
+  let randomPositionX = generatesRanNumBetween(width - 100, 0);
+  let randomPositionY = generatesRanNumBetween(height - 100, 0);
   let randomBoost = generatesRanNumBetween(2, 0);
 
   let boostTypes = [
@@ -86,33 +84,4 @@ export function spawnBoosts(game) {
     ),
   ];
   game.entities.push(boostTypes[randomBoost]);
-}
-
-export function boostEffect(game, entity) {
-  if (entity.type === "healing" && game.player.lives < 5) {
-    game.player.buff.healing = true;
-    game.player.lives++;
-  } else if (entity.type === "speed" && game.player.buff.speed !== true) {
-    game.player.buff.speed = true;
-    if (game.player.buff.speed) {
-      game.player.borderColor = "rgba(39, 245, 237)";
-      game.player.lineWidth = 10;
-      game.player.velocity = new Velocity(650, 650);
-    }
-  } else if (
-    entity.type === "invunerable" &&
-    game.player.buff.invunerable !== true
-  ) {
-    game.player.buff.invunerable = true;
-  }
-}
-export function stopBoostEffect() {
-  if (game.player.buff.speed) {
-    game.player.buff.speed = false;
-    game.player.borderColor = "black";
-    game.player.lineWidth = 1;
-    game.player.velocity = new Velocity(450, 450);
-  } else if (game.player.buff.invunerable) {
-    game.player.buff.invunerable = false;
-  }
 }
