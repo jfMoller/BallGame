@@ -1,12 +1,16 @@
 import { Entity, Position, Velocity } from "./entity.js";
 import { context, width, height, game } from "./game.js";
-import { generatesRanNumBetween } from "./utility.js";
-import { theseCirclesCollide } from "./utility.js";
+import {
+  generatesRanNumBetween,
+  collideTheseCircles,
+  isOutsideCanvas,
+  removesEntity,
+} from "./utility.js";
 
 export class Enemy extends Entity {
   constructor(position, velocity) {
     super(position);
-    this.radius = 20;
+    this.radius = 19;
     this.velocity = velocity;
     this.color = "red";
     this.borderColor = "black";
@@ -27,16 +31,39 @@ export class Enemy extends Entity {
     context.textBaseline = "middle";
     context.fillText("👿", this.position.x, this.position.y);
 
-    if (theseCirclesCollide(game.player, this, 100)) {
+    if (collideTheseCircles(game.player, this, 100)) {
       context.fillText("😈", this.position.x, this.position.y);
     }
   }
-  tick() {
+  tick(game) {
     this.moves();
+    if (
+      collideTheseCircles(game.player, this, 0) &&
+      game.player.buff.invunerable === false
+    ) {
+      this.collidesWithPlayer(game);
+    }
+
+    if (game.player.shield) {
+      this.collidesWithShield(game);
+    }
   }
   moves() {
     this.position.x += this.velocity.dx * game.deltaTime;
     this.position.y += this.velocity.dy * game.deltaTime;
+  }
+  collidesWithPlayer(game) {
+    game.entities.splice(game.index--, 1);
+    game.player.lives--;
+  }
+  collidesWithShield(game) {
+    if (collideTheseCircles(game.shield, this, -20)) {
+      game.entities.splice(game.index--, 1);
+    }
+    if (collideTheseCircles(game.shield, this, 0)) {
+      this.velocity.dx *= -1;
+      this.velocity.dy *= -1;
+    }
   }
 }
 export function spawnEnemies(game) {
@@ -61,24 +88,5 @@ export function spawnEnemies(game) {
       new Velocity(randomVelocity, -100)
     ),
   ];
-  if (game.score < 10){
   game.entities.push(enemyDirection[randomDirection]);
-}
-if (game.score >= 10 && game.score < 20){
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-}
-if (game.score >= 20) {
-  game.entities.push(enemyDirection[randomDirection]);
-}
-if (game.score >= 25) {
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-  game.entities.push(enemyDirection[randomDirection]);
-}
-
-
 }

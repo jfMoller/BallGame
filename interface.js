@@ -39,9 +39,9 @@ export function gameInterface(game) {
   let scoreStatus = ["0", "0", "0", "0", game.score];
   let scoreArr = [10, 100, 1000, 10000, 99999];
 
-  for (let n = 0; n < game.score; ++n) {
+  for (let num = 0; num < game.score; ++num) {
     for (let i = 0; i < scoreArr.length; i++) {
-      if (n + 1 === scoreArr[i]) {
+      if (num + 1 === scoreArr[i]) {
         scoreStatus.splice(0, 1);
       }
       if (game.score === 99999) {

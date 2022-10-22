@@ -1,6 +1,6 @@
 import { Entity, Position, Velocity } from "./entity.js";
 import { context, width, height } from "./game.js";
-import { generatesRanNumBetween } from "./utility.js";
+import { generatesRanNumBetween, collideTheseCircles } from "./utility.js";
 
 export class Boost extends Entity {
   constructor(position, color, type) {
@@ -36,6 +36,25 @@ export class Boost extends Entity {
       context.fillText("🎭", this.position.x, this.position.y);
     }
   }
+  tick(game) {
+    if (game.player.shield && collideTheseCircles(game.shield, this, 0)) {
+      this.collidesWithShield(game);
+    }
+    if (collideTheseCircles(game.player, this, 0)) {
+      this.collidesWithPlayer(game);
+      this.isActive(game);
+    }
+    if (game.tickTime - game.tickTime_Boost > game.boostDuration) {
+      this.isInactive(game);
+    }
+  }
+  collidesWithShield(game) {
+    game.entities.splice(game.index--, 1);
+  }
+  collidesWithPlayer(game) {
+    game.entities.splice(game.index--, 1);
+    game.tickTime_Boost = game.tickTime;
+  }
   isActive(game) {
     if (this.type === "healing" && game.player.lives < 5) {
       game.player.buff.healing = true;
@@ -44,10 +63,10 @@ export class Boost extends Entity {
     if (this.type === "speed" && game.player.buff.speed !== true) {
       game.player.buff.speed = true;
 
-    if (game.player.buff.speed) {
-      game.player.borderColor = "rgba(39, 245, 237)";
-      game.player.lineWidth = 10;
-      game.player.velocity = new Velocity(650, 650);
+      if (game.player.buff.speed) {
+        game.player.borderColor = "rgba(39, 245, 237)";
+        game.player.lineWidth = 10;
+        game.player.velocity = new Velocity(650, 650);
       }
     }
     if (this.type === "invunerable" && game.player.buff.invunerable !== true) {
