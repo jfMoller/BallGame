@@ -59,8 +59,8 @@ export function gameInterface(game) {
 
   function styling(element) {
     element.style.fontSize = "40px";
+    element.style.color = "white"
     element.style.textAlign = "center";
-    element.style.tex;
     element.style.textBaseline = "center";
   }
 }

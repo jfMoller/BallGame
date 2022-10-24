@@ -1,3 +1,4 @@
+
 import { Entity, Velocity } from "./entity.js";
 import { game, context, width, height } from "./game.js";
 
@@ -22,12 +23,13 @@ export class Player extends Entity {
     super(position);
     this.radius = 27;
     this.velocity = new Velocity(450, 450);
-    this.color = "black";
+    this.color = "rgba(204, 219, 220, 1)"
     this.borderColor = "black";
+    this.filter = null;
     this.keys = new Keys();
     this.lives = 4;
     this.buff = new Buff();
-    this.lineWidth = 1;
+    this.lineWidth = 0;
     this.shield = false;
   }
   draw() {
@@ -40,32 +42,44 @@ export class Player extends Entity {
     context.fill();
     context.closePath();
 
-    context.font = "45px serif";
+    context.font = "40px serif";
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
+  
+
+    if (game.player.keys.up) {
+      context.fillText("+", this.position.x, this.position.y - 5);
+    }
+    if (game.player.keys.up && game.player.left) {
+      context.fillText("+", this.position.x - 5, this.position.y - 5);
+    }
+    if (game.player.keys.up && game.player.right) {
+      context.fillText("+", this.position.x + 5, this.position.y - 5);
+    }
+    if (game.player.keys.down) {
+      context.fillText("+", this.position.x, this.position.y + 5);
+    }
+    if (game.player.keys.down && game.player.left) {
+      context.fillText("+", this.position.x - 5, this.position.y + 5);
+    }
+    if (game.player.keys.down && game.player.right) {
+      context.fillText("+", this.position.x + 5, this.position.y - 5);
+    }
+    if (game.player.keys.left) {
+      context.fillText("+", this.position.x - 5, this.position.y);
+    }
+    if (game.player.keys.right) {
+      context.fillText("+", this.position.x + 5, this.position.y);
+    } else {
+      context.fillText("+", this.position.x, this.position.y);
+    }
 
     if (this.buff.invunerable) {
-      context.fillText("🥸", this.position.x, this.position.y);
+      this.color = "rgba(204, 219, 220, 0.1)";
     }
-
-    if (this.lives >= 5 && this.buff.invunerable !== true) {
-      context.fillText("😁", this.position.x, this.position.y);
-    }
-    if (this.lives === 4 && this.buff.invunerable !== true) {
-      context.fillText("😃", this.position.x, this.position.y);
-    }
-    if (this.lives === 3 && this.buff.invunerable !== true) {
-      context.fillText("🙂", this.position.x, this.position.y);
-    }
-    if (this.lives === 2 && this.buff.invunerable !== true) {
-      context.fillText("😣", this.position.x, this.position.y);
-    }
-    if (this.lives === 1 && this.buff.invunerable !== true) {
-      context.fillText("😖", this.position.x, this.position.y);
-    }
-    if (this.lives <= 0 && this.buff.invunerable !== true) {
-      context.fillText("😵", this.position.x, this.position.y);
+    else {
+      this.color = "rgba(204, 219, 220, 1)";
     }
   }
   tick() {

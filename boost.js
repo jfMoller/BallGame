@@ -20,20 +20,19 @@ export class Boost extends Entity {
     context.fill();
     context.closePath();
 
-    context.fillStyle = "black";
+    context.fillStyle = "white";
     context.textAlign = "center";
-    context.textBaseline = "middle";
+    context.textBaseline = "bottom";
+    context.font = "20px serif";
+
     if (this.type === "healing") {
-      context.font = "35px serif";
-      context.fillText("❤️", this.position.x, this.position.y);
+      context.fillText("Health", this.position.x, this.position.y - 15);
     }
     if (this.type === "speed") {
-      context.font = "50px serif";
-      context.fillText("🍬", this.position.x, this.position.y);
+      context.fillText("Speed", this.position.x, this.position.y - 15);
     }
     if (this.type === "invunerable") {
-      context.font = "60px serif";
-      context.fillText("🎭", this.position.x, this.position.y);
+      context.fillText("Invisible", this.position.x, this.position.y - 15);
     }
   }
   tick(game) {
@@ -64,8 +63,6 @@ export class Boost extends Entity {
       game.player.buff.speed = true;
 
       if (game.player.buff.speed) {
-        game.player.borderColor = "rgba(39, 245, 237)";
-        game.player.lineWidth = 10;
         game.player.velocity = new Velocity(650, 650);
       }
     }
@@ -76,8 +73,6 @@ export class Boost extends Entity {
   isInactive(game) {
     if (game.player.buff.speed) {
       game.player.buff.speed = false;
-      game.player.borderColor = "black";
-      game.player.lineWidth = 1;
       game.player.velocity = new Velocity(450, 450);
     } else if (game.player.buff.invunerable) {
       game.player.buff.invunerable = false;

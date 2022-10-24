@@ -113,7 +113,17 @@ function spawnEnemies() {
       new Velocity(randomVelocity, -100)
     ),
   ];
-  game.entities.push(enemyDirection[randomDirection]);
+    game.entities.push(enemyDirection[randomDirection])
+
+    if (game.score % 5 === 0) {
+      game.entities.push(enemyDirection[randomDirection])
+      game.entities.push(enemyDirection[randomDirection])
+    }
+    if (game.score % 10 === 0) {
+      game.entities.push(enemyDirection[randomDirection])
+      game.entities.push(enemyDirection[randomDirection])
+      game.entities.push(enemyDirection[randomDirection])
+    }
 }
 
 if (game.spawnBoosts) {
@@ -129,13 +139,13 @@ function spawnBoosts() {
   let boostTypes = [
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "black",
+      "rgba(219, 48, 105, 1)",
       "healing"
     ),
-    new Boost(new Position(randomPositionX, randomPositionY), "black", "speed"),
+    new Boost(new Position(randomPositionX, randomPositionY), "#3185FC", "speed"),
     new Boost(
       new Position(randomPositionX, randomPositionY),
-      "black",
+      "#F9C22E",
       "invunerable"
     ),
   ];

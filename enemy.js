@@ -7,27 +7,28 @@ export class Enemy extends Entity {
     super(position);
     this.radius = 19;
     this.velocity = velocity;
-    this.color = "red";
+    this.color = "rgba(183, 79, 111, 1)";
     this.borderColor = "black";
+    context.lineWidth = 1;
     this.id = "Enemy";
   }
   draw() {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
+    context.lineWidth = this.lineWidth;
     context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
     context.stroke();
     context.fill();
     context.closePath();
 
-    context.font = "48px serif";
+    context.font = "30px serif";
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText("👿", this.position.x, this.position.y);
 
     if (collideTheseCircles(game.player, this, 100)) {
-      context.fillText("😈", this.position.x, this.position.y);
+      context.fillText("!", this.position.x, this.position.y);
     }
   }
   tick(game) {
@@ -52,12 +53,15 @@ export class Enemy extends Entity {
     game.player.lives--;
   }
   collidesWithShield(game) {
-    if (collideTheseCircles(game.shield, this, -20)) {
+    if (collideTheseCircles(game.shield, this, -10)) {
       game.entities.splice(game.index--, 1);
     }
     if (collideTheseCircles(game.shield, this, 0)) {
-      this.velocity.dx *= -1;
-      this.velocity.dy *= -1;
+      if (this.velocity.dx > this.velocity.dy) {
+        this.velocity.dy *= -1;
+      } else {
+        this.velocity.dx *= -1;
+      }
     }
   }
 }
