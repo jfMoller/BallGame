@@ -46,10 +46,9 @@ export class Player extends Entity {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-  
-
+   
     if (game.player.keys.up) {
-      context.fillText("+", this.position.x, this.position.y - 5);
+    context.fillText("+", this.position.x, this.position.y - 5);
     }
     if (game.player.keys.up && game.player.left) {
       context.fillText("+", this.position.x - 5, this.position.y - 5);
@@ -71,15 +70,22 @@ export class Player extends Entity {
     }
     if (game.player.keys.right) {
       context.fillText("+", this.position.x + 5, this.position.y);
-    } else {
-      context.fillText("+", this.position.x, this.position.y);
-    }
+    } 
+    else {  context.fillText("+", this.position.x, this.position.y)}
 
     if (this.buff.invunerable) {
       this.color = "rgba(204, 219, 220, 0.1)";
     }
     else {
       this.color = "rgba(204, 219, 220, 1)";
+    }
+
+    if (game.shield.ready) {
+    context.font = "20px serif";
+    context.fillStyle = "white";
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+      context.fillText("Shield (Space)", this.position.x, this.position.y - 40);
     }
   }
   tick() {

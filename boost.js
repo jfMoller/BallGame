@@ -32,7 +32,7 @@ export class Boost extends Entity {
       context.fillText("Speed", this.position.x, this.position.y - 15);
     }
     if (this.type === "invunerable") {
-      context.fillText("Invisible", this.position.x, this.position.y - 15);
+      context.fillText("Invunerability", this.position.x, this.position.y - 15);
     }
   }
   tick(game) {

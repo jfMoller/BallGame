@@ -122,7 +122,6 @@ function spawnEnemies() {
     if (game.score % 10 === 0) {
       game.entities.push(enemyDirection[randomDirection])
       game.entities.push(enemyDirection[randomDirection])
-      game.entities.push(enemyDirection[randomDirection])
     }
 }
 

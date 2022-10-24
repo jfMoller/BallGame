@@ -53,7 +53,7 @@ export class Enemy extends Entity {
     game.player.lives--;
   }
   collidesWithShield(game) {
-    if (collideTheseCircles(game.shield, this, -10)) {
+    if (collideTheseCircles(game.shield, this, -25)) {
       game.entities.splice(game.index--, 1);
     }
     if (collideTheseCircles(game.shield, this, 0)) {
