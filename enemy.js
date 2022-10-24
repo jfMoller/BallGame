@@ -1,11 +1,6 @@
-import { Entity, Position, Velocity } from "./entity.js";
-import { context, width, height, game } from "./game.js";
-import {
-  generatesRanNumBetween,
-  collideTheseCircles,
-  isOutsideCanvas,
-  removesEntity,
-} from "./utility.js";
+import { Entity } from "./entity.js";
+import { context, game } from "./game.js";
+import { collideTheseCircles } from "./utility.js";
 
 export class Enemy extends Entity {
   constructor(position, velocity) {
@@ -65,28 +60,4 @@ export class Enemy extends Entity {
       this.velocity.dy *= -1;
     }
   }
-}
-export function spawnEnemies(game) {
-  let randomDirection = generatesRanNumBetween(3, 0);
-  let randomVelocity = generatesRanNumBetween(50, 0);
-
-  let enemyDirection = [
-    new Enemy(
-      new Position(Math.random() * width, 0),
-      new Velocity(randomVelocity, 100)
-    ),
-    new Enemy(
-      new Position(0, Math.random() * height),
-      new Velocity(100, randomVelocity)
-    ),
-    new Enemy(
-      new Position(width, Math.random() * height),
-      new Velocity(-100, randomVelocity)
-    ),
-    new Enemy(
-      new Position(Math.random() * width, height),
-      new Velocity(randomVelocity, -100)
-    ),
-  ];
-  game.entities.push(enemyDirection[randomDirection]);
 }

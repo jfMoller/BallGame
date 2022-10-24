@@ -3,7 +3,7 @@ const textTop2 = document.getElementById("topUiRight");
 const textBottom = document.getElementById("bottomUi");
 
 export function gameInterface(game) {
-  //shield
+  
   let shieldStatus = null;
   if (game.shield.ready === false) {
     shieldStatus = " ⬛️⬛️⬛️⬛️";
@@ -29,7 +29,7 @@ export function gameInterface(game) {
   if (game.shield.ready) {
     shieldStatus = " 🟩🟩🟩🟩";
   }
-  //health
+  
   let healthStatus = "";
   for (let n = 0; n < game.player.lives; ++n) {
     healthStatus += "❤️";

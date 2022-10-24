@@ -10,9 +10,5 @@ game.start();
 
 //endscreen
 
-//building interface
-
-/* textUi.innerText = "testing" */
-
 
  

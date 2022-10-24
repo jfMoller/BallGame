@@ -1,6 +1,6 @@
-import { Entity, Position, Velocity } from "./entity.js";
-import { context, width, height } from "./game.js";
-import { generatesRanNumBetween, collideTheseCircles } from "./utility.js";
+import { Entity, Velocity } from "./entity.js";
+import { context } from "./game.js";
+import { collideTheseCircles } from "./utility.js";
 
 export class Boost extends Entity {
   constructor(position, color, type) {
@@ -83,24 +83,4 @@ export class Boost extends Entity {
       game.player.buff.invunerable = false;
     }
   }
-}
-export function spawnBoosts(game) {
-  let randomPositionX = generatesRanNumBetween(width - 100, 0);
-  let randomPositionY = generatesRanNumBetween(height - 100, 0);
-  let randomBoost = generatesRanNumBetween(2, 0);
-
-  let boostTypes = [
-    new Boost(
-      new Position(randomPositionX, randomPositionY),
-      "black",
-      "healing"
-    ),
-    new Boost(new Position(randomPositionX, randomPositionY), "black", "speed"),
-    new Boost(
-      new Position(randomPositionX, randomPositionY),
-      "black",
-      "invunerable"
-    ),
-  ];
-  game.entities.push(boostTypes[randomBoost]);
 }
