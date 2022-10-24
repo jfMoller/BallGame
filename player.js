@@ -20,9 +20,9 @@ export class Keys {
 export class Player extends Entity {
   constructor(position) {
     super(position);
-    this.radius = 28;
+    this.radius = 27;
     this.velocity = new Velocity(450, 450);
-    this.color = "orange";
+    this.color = "black";
     this.borderColor = "black";
     this.keys = new Keys();
     this.lives = 4;
@@ -40,7 +40,7 @@ export class Player extends Entity {
     context.fill();
     context.closePath();
 
-    context.font = "40px serif";
+    context.font = "45px serif";
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
