@@ -1,5 +1,5 @@
 import { Entity, Velocity } from "./entity.js";
-import { context } from "./game.js";
+import { context, player, shield } from "./game.js";
 import { collideTheseCircles } from "./utility.js";
 
 export class Boost extends Entity {
@@ -36,10 +36,10 @@ export class Boost extends Entity {
     }
   }
   tick(game) {
-    if (game.player.shield && collideTheseCircles(game.shield, this, 0)) {
+    if (player.shield && collideTheseCircles(shield, this, 0)) {
       this.collidesWithShield(game);
     }
-    if (collideTheseCircles(game.player, this, 0)) {
+    if (collideTheseCircles(player, this, 0)) {
       this.collidesWithPlayer(game);
       this.isActive(game);
     }
@@ -54,28 +54,28 @@ export class Boost extends Entity {
     game.entities.splice(game.index--, 1);
     game.tickTime_Boost = game.tickTime;
   }
-  isActive(game) {
-    if (this.type === "healing" && game.player.lives < 5) {
-      game.player.buff.healing = true;
-      game.player.lives++;
+  isActive() {
+    if (this.type === "healing" && player.lives < 5) {
+      player.buff.healing = true;
+      player.lives++;
     }
-    if (this.type === "speed" && game.player.buff.speed !== true) {
-      game.player.buff.speed = true;
+    if (this.type === "speed" && player.buff.speed !== true) {
+      player.buff.speed = true;
 
-      if (game.player.buff.speed) {
-        game.player.velocity = new Velocity(650, 650);
+      if (player.buff.speed) {
+        player.velocity = new Velocity(650, 650);
       }
     }
-    if (this.type === "invunerable" && game.player.buff.invunerable !== true) {
-      game.player.buff.invunerable = true;
+    if (this.type === "invunerable" && player.buff.invunerable !== true) {
+      player.buff.invunerable = true;
     }
   }
   isInactive(game) {
-    if (game.player.buff.speed) {
-      game.player.buff.speed = false;
-      game.player.velocity = new Velocity(450, 450);
-    } else if (game.player.buff.invunerable) {
-      game.player.buff.invunerable = false;
+    if (player.buff.speed) {
+      player.buff.speed = false;
+      player.velocity = new Velocity(450, 450);
+    } else if (player.buff.invunerable) {
+      player.buff.invunerable = false;
     }
   }
 }

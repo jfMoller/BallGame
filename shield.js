@@ -1,5 +1,5 @@
 import { Velocity } from "./entity.js";
-import { context, game, width, height } from "./game.js";
+import { context, player, width, height, game } from "./game.js";
 
 export class Shield {
   constructor(position) {
@@ -17,7 +17,7 @@ export class Shield {
   }
 
   draw() {
-    if (game.player.shield) {
+    if (player.shield) {
       context.beginPath();
       context.fillStyle = this.color;
       context.strokeStyle = this.borderColor;
@@ -32,6 +32,7 @@ export class Shield {
       context.stroke();
       context.fill();
       context.closePath();
+      
     }
   }
 
@@ -39,33 +40,33 @@ export class Shield {
     this.isActivated();
     this.isRecharging();
 
-    if (game.player.shield) {
+    if (player.shield) {
       this.moves();
       this.bounces();
     }
   }
   isActivated() {
     //saves the time of which user activated shield
-    if (game.player.keys.space) {
-      game.shield.TickTime = game.tickTime;
+    if (player.keys.space) {
+      this.TickTime = game.tickTime;
     }
     if (
-      game.tickTime - game.shield.TickTime > this.removeIn &&
-      game.player.shield
+      game.tickTime - this.TickTime > this.removeIn &&
+      player.shield
     ) {
       //shrinking
-      if (game.shield.radius > 1) {
-        game.shield.radius -= 0.8;
-        if (game.shield.radius <= 1) {
-          game.player.shield = false;
-          game.shield.radius = 100;
+      if (this.radius > 1) {
+        this.radius -= 0.8;
+        if (this.radius <= 1) {
+          player.shield = false;
+          this.radius = 100;
         }
       }
     }
   }
   isRecharging() {
-    if (game.tickTime - game.shield.TickTime > this.readyIn) {
-      game.shield.ready = true;
+    if (game.tickTime - this.TickTime > this.readyIn) {
+      this.ready = true;
     }
   }
   moves() {
@@ -85,9 +86,8 @@ export class Shield {
     if (this.position.y < this.radius) {
       this.position.y = this.radius - 1;
     }
-    
   }
-   
+
   bounces() {
     if (
       this.position.x > width - this.radius ||

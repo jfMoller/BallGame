@@ -48,6 +48,8 @@ export class Game {
 }
 
 export const game = new Game(canvas, context);
+export const player = game.player;
+export const shield = game.shield;
 
 //to determine duration of boost effect
 game.tickTime_Boost;
@@ -117,10 +119,8 @@ function spawnEnemies() {
 
     if (game.score % 5 === 0) {
       game.entities.push(enemyDirection[randomDirection])
-      game.entities.push(enemyDirection[randomDirection])
     }
     if (game.score % 10 === 0) {
-      game.entities.push(enemyDirection[randomDirection])
       game.entities.push(enemyDirection[randomDirection])
     }
 }

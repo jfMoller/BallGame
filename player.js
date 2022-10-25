@@ -1,4 +1,3 @@
-
 import { Entity, Velocity } from "./entity.js";
 import { game, context, width, height } from "./game.js";
 
@@ -23,7 +22,7 @@ export class Player extends Entity {
     super(position);
     this.radius = 27;
     this.velocity = new Velocity(450, 450);
-    this.color = "rgba(204, 219, 220, 1)"
+    this.color = "rgba(204, 219, 220, 1)";
     this.borderColor = "black";
     this.filter = null;
     this.keys = new Keys();
@@ -42,49 +41,75 @@ export class Player extends Entity {
     context.fill();
     context.closePath();
 
-    context.font = "40px serif";
+    context.font = "60px serif";
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-   
-    if (game.player.keys.up) {
-    context.fillText("+", this.position.x, this.position.y - 5);
+
+    //draw player "face" depending on position, logic prototype, convert to for loop
+    if (
+      game.player.keys.up === false &&
+      game.player.keys.down === false &&
+      game.player.keys.left === false &&
+      game.player.keys.right === false
+    ) {
+      context.fillText("+", this.position.x, this.position.y);
     }
-    if (game.player.keys.up && game.player.left) {
+
+    if (
+      game.player.keys.up &&
+      game.player.keys.left === false &&
+      game.player.keys.right === false
+    ) {
+      context.fillText("+", this.position.x, this.position.y - 5);
+    }
+    if (game.player.keys.up && game.player.keys.left) {
       context.fillText("+", this.position.x - 5, this.position.y - 5);
     }
-    if (game.player.keys.up && game.player.right) {
+    if (game.player.keys.up && game.player.keys.right) {
       context.fillText("+", this.position.x + 5, this.position.y - 5);
     }
-    if (game.player.keys.down) {
+
+    if (
+      game.player.keys.down &&
+      game.player.keys.left === false &&
+      game.player.keys.right === false
+    ) {
       context.fillText("+", this.position.x, this.position.y + 5);
     }
-    if (game.player.keys.down && game.player.left) {
+    if (game.player.keys.down && game.player.keys.right) {
+      context.fillText("+", this.position.x + 5, this.position.y + 5);
+    }
+    if (game.player.keys.down && game.player.keys.left) {
       context.fillText("+", this.position.x - 5, this.position.y + 5);
     }
-    if (game.player.keys.down && game.player.right) {
-      context.fillText("+", this.position.x + 5, this.position.y - 5);
-    }
-    if (game.player.keys.left) {
+
+    if (
+      game.player.keys.left &&
+      game.player.keys.up === false &&
+      game.player.keys.down === false
+    ) {
       context.fillText("+", this.position.x - 5, this.position.y);
     }
-    if (game.player.keys.right) {
+    if (
+      game.player.keys.right &&
+      game.player.keys.up === false &&
+      game.player.keys.down === false
+    ) {
       context.fillText("+", this.position.x + 5, this.position.y);
-    } 
-    else {  context.fillText("+", this.position.x, this.position.y)}
+    }
 
     if (this.buff.invunerable) {
       this.color = "rgba(204, 219, 220, 0.1)";
-    }
-    else {
+    } else {
       this.color = "rgba(204, 219, 220, 1)";
     }
 
     if (game.shield.ready) {
-    context.font = "20px serif";
-    context.fillStyle = "white";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
+      context.font = "20px serif";
+      context.fillStyle = "white";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
       context.fillText("Shield (Space)", this.position.x, this.position.y - 40);
     }
   }

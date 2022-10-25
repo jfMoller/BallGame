@@ -1,57 +1,57 @@
-import { game } from "./game.js";
+import { player, shield } from "./game.js";
 
 export function handleKeyDown(event) {
   if (event.key === "w" || event.key === "W") {
-    game.player.keys.up = true;
+    player.keys.up = true;
   }
   if (event.key === "s" || event.key === "S") {
-    game.player.keys.down = true;
+    player.keys.down = true;
   }
   if (event.key === "a" || event.key === "A") {
-    game.player.keys.left = true;
+    player.keys.left = true;
   }
   if (event.key === "d" || event.key === "D") {
-    game.player.keys.right = true;
+    player.keys.right = true;
   }
-  if (event.key === " " && game.shield.ready && game.shield.radius === 100) {
-    game.player.keys.space = true;
-    game.shield.ready = false;
-    game.player.shield = true;
+  if (event.key === " " && shield.ready && shield.radius === 100) {
+    player.keys.space = true;
+    shield.ready = false;
+    player.shield = true;
 
-    game.shield.velocity.dx = 0;
-    game.shield.velocity.dy = 0;
+    shield.velocity.dx = 0;
+    shield.velocity.dy = 0;
 
-    game.shield.position.x = game.player.position.x;
-    game.shield.position.y = game.player.position.y;
+    shield.position.x = player.position.x;
+    shield.position.y = player.position.y;
 
-    if (game.player.keys.up) {
-      game.shield.velocity.dy -= game.player.velocity.dy - 100;
+    if (player.keys.up) {
+      shield.velocity.dy -= player.velocity.dy - 100;
     }
-    if (game.player.keys.down) {
-      game.shield.velocity.dy += game.player.velocity.dy - 100;
+    if (player.keys.down) {
+      shield.velocity.dy += player.velocity.dy - 100;
     }
-    if (game.player.keys.left) {
-      game.shield.velocity.dx -= game.player.velocity.dx - 100;
+    if (player.keys.left) {
+      shield.velocity.dx -= player.velocity.dx - 100;
     }
-    if (game.player.keys.right) {
-      game.shield.velocity.dx += game.player.velocity.dx - 100;
+    if (player.keys.right) {
+      shield.velocity.dx += player.velocity.dx - 100;
     }
   }
 }
 export function handleKeyUp(event) {
   if (event.key === "w" || event.key === "W") {
-    game.player.keys.up = false;
+    player.keys.up = false;
   }
   if (event.key === "s" || event.key === "S") {
-    game.player.keys.down = false;
+    player.keys.down = false;
   }
   if (event.key === "a" || event.key === "A") {
-    game.player.keys.left = false;
+    player.keys.left = false;
   }
   if (event.key === "d" || event.key === "D") {
-    game.player.keys.right = false;
+    player.keys.right = false;
   }
   if (event.key === " ") {
-    game.player.keys.space = false;
+    player.keys.space = false;
   }
 }

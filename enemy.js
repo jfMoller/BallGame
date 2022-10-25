@@ -1,5 +1,5 @@
 import { Entity } from "./entity.js";
-import { context, game } from "./game.js";
+import { context, game, player, shield } from "./game.js";
 import { collideTheseCircles } from "./utility.js";
 
 export class Enemy extends Entity {
@@ -27,20 +27,27 @@ export class Enemy extends Entity {
     context.textAlign = "center";
     context.textBaseline = "middle";
 
-    if (collideTheseCircles(game.player, this, 100)) {
+    if (collideTheseCircles(player, this, 100)) {
       context.fillText("!", this.position.x, this.position.y);
+    }
+    if (player.shield && collideTheseCircles(this, shield, -20)) {
+      context.font = "20px serif";
+      context.fillStyle = "white";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillText("+1", this.position.x, this.position.y - 40);
     }
   }
   tick(game) {
     this.moves();
     if (
-      collideTheseCircles(game.player, this, 0) &&
-      game.player.buff.invunerable === false
+      collideTheseCircles(player, this, 0) &&
+      player.buff.invunerable === false
     ) {
       this.collidesWithPlayer(game);
     }
 
-    if (game.player.shield) {
+    if (player.shield) {
       this.collidesWithShield(game);
     }
   }
@@ -50,18 +57,15 @@ export class Enemy extends Entity {
   }
   collidesWithPlayer(game) {
     game.entities.splice(game.index--, 1);
-    game.player.lives--;
+    player.lives--;
   }
   collidesWithShield(game) {
-    if (collideTheseCircles(game.shield, this, -25)) {
+    if (collideTheseCircles(shield, this, -20)) {
       game.entities.splice(game.index--, 1);
     }
-    if (collideTheseCircles(game.shield, this, 0)) {
-      if (this.velocity.dx > this.velocity.dy) {
-        this.velocity.dy *= -1;
-      } else {
-        this.velocity.dx *= -1;
-      }
+    if (collideTheseCircles(shield, this, 0)) {
+      this.velocity.dx *= -1;
+      this.velocity.dy *= -1;
     }
   }
 }
