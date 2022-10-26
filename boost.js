@@ -53,28 +53,31 @@ export class Boost extends Entity {
     game.entities.splice(game.index--, 1);
     game.tickTime_Boost = game.tickTime;
   }
-  isActive() {
+  isActive(game) {
     if (this.type === "healing" && game.player.lives < 5) {
-      game.player.buff.healing = true;
+      game.player.effect.healing = true;
       game.player.lives++;
     }
-    if (this.type === "speed" && game.player.buff.speed !== true) {
-      game.player.buff.speed = true;
+    if (this.type === "speed" && game.player.effect.speed !== true) {
+      game.player.effect.speed = true;
 
-      if (game.player.buff.speed) {
+      if (game.player.effect.speed) {
         game.player.velocity = new Velocity(650, 650);
       }
     }
-    if (this.type === "invunerable" && game.player.buff.invunerable !== true) {
-      game.player.buff.invunerable = true;
+    if (
+      this.type === "invunerable" &&
+      game.player.effect.invunerable !== true
+    ) {
+      game.player.effect.invunerable = true;
     }
   }
   isInactive(game) {
-    if (game.player.buff.speed) {
-      game.player.buff.speed = false;
+    if (game.player.effect.speed) {
+      game.player.effect.speed = false;
       game.player.velocity = new Velocity(450, 450);
-    } else if (game.player.buff.invunerable) {
-      game.player.buff.invunerable = false;
+    } else if (game.player.effect.invunerable) {
+      game.player.effect.invunerable = false;
     }
   }
 }

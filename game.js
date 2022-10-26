@@ -35,12 +35,13 @@ export class Game {
     this.tickTime = 0;
     this.tickTime_Shield = 0;
     this.tickTime_Boost = 0;
+    this.tickTime_Enemy = 0;
 
     this.enemiesOn = true;
     this.enemySpawnRate = 500; //ms
     this.enemiesPopped = 0;
 
-    this.boostsOn = false;
+    this.boostsOn = true;
     this.boostSpawnRate = 10000; //ms
     this.boostDuration = 4; //sec
 
@@ -122,6 +123,7 @@ export const shield = game.shield;
 
 //to determine duration of boost effect
 game.tickTime_Boost;
+game.tickTime_Enemy;
 //to remove graphcal flicker issue
 game.index;
 

@@ -31,7 +31,8 @@ export class Enemy extends Entity {
       context.fillText("!", this.position.x, this.position.y);
     }
     if (game.player.shield && collideTheseCircles(this, game.shield, -20)) {
-      context.font = "20px serif";
+      this.tickTime = game.tickTime;
+      context.font = "30px serif";
       context.fillStyle = "white";
       context.textAlign = "center";
       context.textBaseline = "middle";
@@ -42,7 +43,7 @@ export class Enemy extends Entity {
     this.moves(game);
     if (
       collideTheseCircles(game.player, this, 0) &&
-      game.player.buff.invunerable === false
+      game.player.effect.invunerable === false
     ) {
       this.collidesWithPlayer(game);
     }
@@ -62,7 +63,9 @@ export class Enemy extends Entity {
   collidesWithShield(game) {
     if (collideTheseCircles(game.shield, this, -5)) {
       if (this.radius > 1) {
-        this.radius -= 1;
+        this.radius -= 2;
+        this.velocity.dx -= 10;
+        this.velocity.dY -= 10;
         if (this.radius <= 1) {
           this.radius = 19;
           game.entities.splice(game.index--, 1);

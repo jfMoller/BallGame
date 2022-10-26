@@ -1,7 +1,7 @@
 import { Entity, Velocity } from "./entity.js";
 import { width, height } from "./game.js";
 
-export class Buff {
+export class Effect {
   constructor() {
     this.healing = false;
     this.speed = false;
@@ -27,7 +27,7 @@ export class Player extends Entity {
     this.filter = null;
     this.keys = new Keys();
     this.lives = 4;
-    this.buff = new Buff();
+    this.effect = new Effect();
     this.lineWidth = 0;
     this.shield = false;
   }
@@ -46,8 +46,9 @@ export class Player extends Entity {
     context.textAlign = "center";
     context.textBaseline = "middle";
 
+    
     //draw player "face" depending on position, logic prototype, convert to for loop
-    if (
+   if (
       game.player.keys.up === false &&
       game.player.keys.down === false &&
       game.player.keys.left === false &&
@@ -98,8 +99,8 @@ export class Player extends Entity {
     ) {
       context.fillText("+", this.position.x + 5, this.position.y);
     }
-
-    if (this.buff.invunerable) {
+ 
+    if (this.effect.invunerable) {
       this.color = "rgba(204, 219, 220, 0.1)";
     } else {
       this.color = "rgba(204, 219, 220, 1)";
