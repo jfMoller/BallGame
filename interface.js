@@ -9,20 +9,20 @@ export function gameInterface(game) {
     shieldStatus = " ⬛️⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 1) / 4 &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 2) / 4
+    game.tickTime - game.shield.tickTime > (game.shield.readyIn * 1) / 4 &&
+    game.tickTime - game.shield.tickTime < (game.shield.readyIn * 2) / 4
   ) {
     shieldStatus = " 🟩⬛️⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 2) / 4 &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 3) / 4
+    game.tickTime - game.shield.tickTime > (game.shield.readyIn * 2) / 4 &&
+    game.tickTime - game.shield.tickTime < (game.shield.readyIn * 3) / 4
   ) {
     shieldStatus = " 🟩🟩⬛️⬛️";
   }
   if (
-    game.tickTime - game.shield.TickTime > (game.shield.readyIn * 3) / 4 &&
-    game.tickTime - game.shield.TickTime < (game.shield.readyIn * 4) / 4
+    game.tickTime - game.shield.tickTime > (game.shield.readyIn * 3) / 4 &&
+    game.tickTime - game.shield.tickTime < (game.shield.readyIn * 4) / 4
   ) {
     shieldStatus = " 🟩🟩🟩⬛️";
   }

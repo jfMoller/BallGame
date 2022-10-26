@@ -1,5 +1,4 @@
 import { Entity } from "./entity.js";
-import { context, game, player, shield } from "./game.js";
 import { collideTheseCircles } from "./utility.js";
 
 export class Enemy extends Entity {
@@ -9,10 +8,11 @@ export class Enemy extends Entity {
     this.velocity = velocity;
     this.color = "rgba(183, 79, 111, 1)";
     this.borderColor = "black";
-    context.lineWidth = 1;
+    this.lineWidth = 1;
     this.id = "Enemy";
+    this.tickTime = null;
   }
-  draw() {
+  draw(context, game) {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
@@ -27,10 +27,10 @@ export class Enemy extends Entity {
     context.textAlign = "center";
     context.textBaseline = "middle";
 
-    if (collideTheseCircles(player, this, 100)) {
+    if (collideTheseCircles(game.player, this, 100)) {
       context.fillText("!", this.position.x, this.position.y);
     }
-    if (player.shield && collideTheseCircles(this, shield, -20)) {
+    if (game.player.shield && collideTheseCircles(this, game.shield, -20)) {
       context.font = "20px serif";
       context.fillStyle = "white";
       context.textAlign = "center";
@@ -39,31 +39,38 @@ export class Enemy extends Entity {
     }
   }
   tick(game) {
-    this.moves();
+    this.moves(game);
     if (
-      collideTheseCircles(player, this, 0) &&
-      player.buff.invunerable === false
+      collideTheseCircles(game.player, this, 0) &&
+      game.player.buff.invunerable === false
     ) {
       this.collidesWithPlayer(game);
     }
 
-    if (player.shield) {
+    if (game.player.shield) {
       this.collidesWithShield(game);
     }
   }
-  moves() {
+  moves(game) {
     this.position.x += this.velocity.dx * game.deltaTime;
     this.position.y += this.velocity.dy * game.deltaTime;
   }
   collidesWithPlayer(game) {
     game.entities.splice(game.index--, 1);
-    player.lives--;
+    game.player.lives--;
   }
   collidesWithShield(game) {
-    if (collideTheseCircles(shield, this, -20)) {
-      game.entities.splice(game.index--, 1);
+    if (collideTheseCircles(game.shield, this, -5)) {
+      if (this.radius > 1) {
+        this.radius -= 1;
+        if (this.radius <= 1) {
+          this.radius = 19;
+          game.entities.splice(game.index--, 1);
+          game.enemiesPopped++;
+        }
+      }
     }
-    if (collideTheseCircles(shield, this, 0)) {
+    if (collideTheseCircles(game.shield, this, 0)) {
       this.velocity.dx *= -1;
       this.velocity.dy *= -1;
     }

@@ -1,5 +1,5 @@
 import { Entity, Velocity } from "./entity.js";
-import { game, context, width, height } from "./game.js";
+import { width, height } from "./game.js";
 
 export class Buff {
   constructor() {
@@ -31,7 +31,7 @@ export class Player extends Entity {
     this.lineWidth = 0;
     this.shield = false;
   }
-  draw() {
+  draw(context, game) {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
@@ -113,10 +113,10 @@ export class Player extends Entity {
       context.fillText("Shield (Space)", this.position.x, this.position.y - 40);
     }
   }
-  tick() {
-    this.moves();
+  tick(game) {
+    this.moves(game);
   }
-  moves() {
+  moves(game) {
     if (this.keys.up && this.position.y > this.radius) {
       this.position.y -= this.velocity.dy * game.deltaTime;
     }

@@ -24,6 +24,9 @@ export class Game {
     ];
     this.player = this.entities[0];
     this.shield = this.entities[1];
+    this.enemy = null;
+    this.boost;
+    
 
     this.deltaTime = 0;
     this.score = 0;
@@ -33,10 +36,11 @@ export class Game {
     this.tickTime_Shield = 0;
     this.tickTime_Boost = 0;
 
-    this.spawnEnemies = true;
+    this.enemiesOn = true;
     this.enemySpawnRate = 500; //ms
+    this.enemiesPopped = 0;
 
-    this.spawnBoosts = true;
+    this.boostsOn = false;
     this.boostSpawnRate = 10000; //ms
     this.boostDuration = 4; //sec
 
@@ -44,6 +48,71 @@ export class Game {
   }
   start() {
     tick();
+    if (this.enemiesOn) {
+      setInterval(() => {
+        this.spawnEnemies();
+      }, this.enemySpawnRate);
+    }
+    if (this.boostsOn) {
+      setInterval(() => {
+        this.spawnBoosts();
+      }, this.boostSpawnRate);
+    }
+  }
+  spawnEnemies() {
+    let randomDirection = generatesRanNumBetween(3, 0);
+    let randomVelocity = generatesRanNumBetween(50, 0);
+
+    let enemyDirection = [
+      new Enemy(
+        new Position(Math.random() * width, 0),
+        new Velocity(randomVelocity, 100)
+      ),
+      new Enemy(
+        new Position(0, Math.random() * height),
+        new Velocity(100, randomVelocity)
+      ),
+      new Enemy(
+        new Position(width, Math.random() * height),
+        new Velocity(-100, randomVelocity)
+      ),
+      new Enemy(
+        new Position(Math.random() * width, height),
+        new Velocity(randomVelocity, -100)
+      ),
+    ];
+    this.entities.push(enemyDirection[randomDirection]);
+
+    if (this.score % 5 === 0) {
+      this.entities.push(enemyDirection[randomDirection]);
+    }
+    if (this.score % 10 === 0) {
+      this.entities.push(enemyDirection[randomDirection]);
+    }
+  }
+  spawnBoosts() {
+    let randomPositionX = generatesRanNumBetween(width - 100, 0);
+    let randomPositionY = generatesRanNumBetween(height - 100, 0);
+    let randomBoost = generatesRanNumBetween(2, 0);
+
+    let boostTypes = [
+      new Boost(
+        new Position(randomPositionX, randomPositionY),
+        "rgba(219, 48, 105, 1)",
+        "healing"
+      ),
+      new Boost(
+        new Position(randomPositionX, randomPositionY),
+        "#3185FC",
+        "speed"
+      ),
+      new Boost(
+        new Position(randomPositionX, randomPositionY),
+        "#F9C22E",
+        "invunerable"
+      ),
+    ];
+    this.entities.push(boostTypes[randomBoost]);
   }
 }
 
@@ -63,8 +132,7 @@ function tick() {
   game.deltaTime = (currentTick - lastTick) / 1000;
   lastTick = currentTick;
   game.tickTime += game.deltaTime;
-  game.score = Math.floor(game.tickTime);
-
+  game.score = Math.floor(game.tickTime) + game.enemiesPopped;
   context.clearRect(0, 0, width, height);
 
   //game interface prototype
@@ -74,10 +142,16 @@ function tick() {
   for (game.index = 0; game.index < game.entities.length; ++game.index) {
     let entity = game.entities[game.index];
     entity.tick(game);
-    entity.draw(game);
+    entity.draw(context, game);
 
     if (isOutsideCanvas(entity)) {
       game.entities.splice(game.index--, 1);
+    }
+    if (entity instanceof Enemy) {
+      game.enemy = entity;
+    }
+    if (entity instanceof Boost) {
+      game.boost = entity;
     }
   }
 
@@ -86,67 +160,4 @@ function tick() {
     return;
   }
   requestAnimationFrame(tick);
-}
-
-if (game.spawnEnemies) {
-  setInterval(() => {
-    spawnEnemies(game);
-  }, game.enemySpawnRate);
-}
-function spawnEnemies() {
-  let randomDirection = generatesRanNumBetween(3, 0);
-  let randomVelocity = generatesRanNumBetween(50, 0);
-
-  let enemyDirection = [
-    new Enemy(
-      new Position(Math.random() * width, 0),
-      new Velocity(randomVelocity, 100)
-    ),
-    new Enemy(
-      new Position(0, Math.random() * height),
-      new Velocity(100, randomVelocity)
-    ),
-    new Enemy(
-      new Position(width, Math.random() * height),
-      new Velocity(-100, randomVelocity)
-    ),
-    new Enemy(
-      new Position(Math.random() * width, height),
-      new Velocity(randomVelocity, -100)
-    ),
-  ];
-    game.entities.push(enemyDirection[randomDirection])
-
-    if (game.score % 5 === 0) {
-      game.entities.push(enemyDirection[randomDirection])
-    }
-    if (game.score % 10 === 0) {
-      game.entities.push(enemyDirection[randomDirection])
-    }
-}
-
-if (game.spawnBoosts) {
-  setInterval(() => {
-    spawnBoosts(game);
-  }, game.boostSpawnRate);
-}
-function spawnBoosts() {
-  let randomPositionX = generatesRanNumBetween(width - 100, 0);
-  let randomPositionY = generatesRanNumBetween(height - 100, 0);
-  let randomBoost = generatesRanNumBetween(2, 0);
-
-  let boostTypes = [
-    new Boost(
-      new Position(randomPositionX, randomPositionY),
-      "rgba(219, 48, 105, 1)",
-      "healing"
-    ),
-    new Boost(new Position(randomPositionX, randomPositionY), "#3185FC", "speed"),
-    new Boost(
-      new Position(randomPositionX, randomPositionY),
-      "#F9C22E",
-      "invunerable"
-    ),
-  ];
-  game.entities.push(boostTypes[randomBoost]);
 }

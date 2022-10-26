@@ -1,5 +1,5 @@
 import { Velocity } from "./entity.js";
-import { context, player, width, height, game } from "./game.js";
+import { width, height} from "./game.js";
 
 export class Shield {
   constructor(position) {
@@ -16,8 +16,8 @@ export class Shield {
     this.tickTime = null;
   }
 
-  draw() {
-    if (player.shield) {
+  draw(context, game) {
+    if (game.player.shield) {
       context.beginPath();
       context.fillStyle = this.color;
       context.strokeStyle = this.borderColor;
@@ -32,44 +32,44 @@ export class Shield {
       context.stroke();
       context.fill();
       context.closePath();
-      
+    
     }
   }
 
   tick(game) {
-    this.isActivated();
-    this.isRecharging();
+    this.isActivated(game);
+    this.isRecharging(game);
 
-    if (player.shield) {
-      this.moves();
-      this.bounces();
+    if (game.player.shield) {
+      this.moves(game);
+      this.bounces(game);
     }
   }
-  isActivated() {
+  isActivated(game) {
     //saves the time of which user activated shield
-    if (player.keys.space) {
-      this.TickTime = game.tickTime;
+    if (game.player.keys.space) {
+      this.tickTime = game.tickTime;
     }
     if (
-      game.tickTime - this.TickTime > this.removeIn &&
-      player.shield
+      game.tickTime - this.tickTime > this.removeIn &&
+      game.player.shield
     ) {
       //shrinking
       if (this.radius > 1) {
         this.radius -= 0.8;
         if (this.radius <= 1) {
-          player.shield = false;
+          game.player.shield = false;
           this.radius = 100;
         }
       }
     }
   }
-  isRecharging() {
-    if (game.tickTime - this.TickTime > this.readyIn) {
+  isRecharging(game) {
+    if (game.tickTime - this.tickTime > this.readyIn) {
       this.ready = true;
     }
   }
-  moves() {
+  moves(game) {
     this.position.x += this.velocity.dx * game.deltaTime;
     this.position.y += this.velocity.dy * game.deltaTime;
 
@@ -88,7 +88,7 @@ export class Shield {
     }
   }
 
-  bounces() {
+  bounces(game) {
     if (
       this.position.x > width - this.radius ||
       this.position.x <= this.radius
