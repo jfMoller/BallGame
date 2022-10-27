@@ -11,7 +11,7 @@ export class Shield {
     this.lineWidth = 3;
     this.id = "Shield";
     this.ready = true;
-    this.readyIn = 1; //sec, shield can then be activated
+    this.readyIn = 15; //sec, shield can then be activated
     this.removeIn = 8; //sec, shield lasts for this.removeIn * 0.8 before shrinking
     this.tickTime = null;
   }
