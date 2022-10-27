@@ -45,61 +45,39 @@ export class Player extends Entity {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
+    //loop draws players face depending on direction
+    let keys = [this.keys.up, this.keys.down, this.keys.left, this.keys.right];
+    let x = 0;
+    let y = 0;
+    for (let i = 0; i < 4; i++) {
+      if (
+        keys[0] === false &&
+        keys[1] === false &&
+        keys[2] === false &&
+        keys[3] === false
+      ) {
+        y = 0;
+        x = 0;
+      } else if (keys[i]) {
+        if (keys[i] === this.keys.up) {
+          y -= 3;
+        }
 
-    
-    //draw player "face" depending on position, logic prototype, convert to for loop
-   if (
-      game.player.keys.up === false &&
-      game.player.keys.down === false &&
-      game.player.keys.left === false &&
-      game.player.keys.right === false
-    ) {
-      context.fillText("+", this.position.x, this.position.y);
-    }
+        if (keys[i] === this.keys.down) {
+          y += 3;
+        }
 
-    if (
-      game.player.keys.up &&
-      game.player.keys.left === false &&
-      game.player.keys.right === false
-    ) {
-      context.fillText("+", this.position.x, this.position.y - 5);
-    }
-    if (game.player.keys.up && game.player.keys.left) {
-      context.fillText("+", this.position.x - 5, this.position.y - 5);
-    }
-    if (game.player.keys.up && game.player.keys.right) {
-      context.fillText("+", this.position.x + 5, this.position.y - 5);
-    }
+        if (keys[i] === this.keys.left) {
+          x -= 3;
+        }
 
-    if (
-      game.player.keys.down &&
-      game.player.keys.left === false &&
-      game.player.keys.right === false
-    ) {
-      context.fillText("+", this.position.x, this.position.y + 5);
+        if (keys[i] === this.keys.right) {
+          x += 3;
+        }
+      }
     }
-    if (game.player.keys.down && game.player.keys.right) {
-      context.fillText("+", this.position.x + 5, this.position.y + 5);
-    }
-    if (game.player.keys.down && game.player.keys.left) {
-      context.fillText("+", this.position.x - 5, this.position.y + 5);
-    }
+    context.fillText("+", this.position.x + x, this.position.y + y);
 
-    if (
-      game.player.keys.left &&
-      game.player.keys.up === false &&
-      game.player.keys.down === false
-    ) {
-      context.fillText("+", this.position.x - 5, this.position.y);
-    }
-    if (
-      game.player.keys.right &&
-      game.player.keys.up === false &&
-      game.player.keys.down === false
-    ) {
-      context.fillText("+", this.position.x + 5, this.position.y);
-    }
- 
     if (this.effect.invunerable) {
       this.color = "rgba(204, 219, 220, 0.1)";
     } else {

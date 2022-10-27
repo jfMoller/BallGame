@@ -1,16 +1,22 @@
 import { Entity } from "./entity.js";
 import { collideTheseCircles } from "./utility.js";
 
+export class Type{
+  constructor() {
+    this.normal = "normal"
+    this.special = "special"
+  }
+}
+
 export class Enemy extends Entity {
-  constructor(position, velocity) {
+  constructor(position, velocity, color, type) {
     super(position);
     this.radius = 19;
     this.velocity = velocity;
-    this.color = "rgba(183, 79, 111, 1)";
+    this.color = color;
     this.borderColor = "black";
     this.lineWidth = 1;
-    this.id = "Enemy";
-    this.tickTime = null;
+    this.type = type;
   }
   draw(context, game) {
     context.beginPath();
@@ -74,8 +80,12 @@ export class Enemy extends Entity {
       }
     }
     if (collideTheseCircles(game.shield, this, 0)) {
+    if (this.velocity.dx > this.velocity.dy) {
       this.velocity.dx *= -1;
+    }
+    if (this.velocity.dx > this.velocity.dy) {
       this.velocity.dy *= -1;
+    }
     }
   }
 }

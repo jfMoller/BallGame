@@ -8,7 +8,6 @@ export class Boost extends Entity {
     this.color = color;
     this.borderColor = "black";
     this.type = type;
-    this.tickTime = null;
   }
   draw(context) {
     context.beginPath();
@@ -42,7 +41,7 @@ export class Boost extends Entity {
       this.collidesWithPlayer(game);
       this.isActive(game);
     }
-    if (game.tickTime - game.tickTime_Boost > game.boostDuration) {
+    if (game.tickTime - game.tickTime_Effect > game.boostDuration) {
       this.isInactive(game);
     }
   }
@@ -51,7 +50,7 @@ export class Boost extends Entity {
   }
   collidesWithPlayer(game) {
     game.entities.splice(game.index--, 1);
-    game.tickTime_Boost = game.tickTime;
+    game.tickTime_Effect = game.tickTime;
   }
   isActive(game) {
     if (this.type === "healing" && game.player.lives < 5) {

@@ -11,7 +11,7 @@ export class Shield {
     this.lineWidth = 3;
     this.id = "Shield";
     this.ready = true;
-    this.readyIn = 20; //sec, shield can then be activated
+    this.readyIn = 1; //sec, shield can then be activated
     this.removeIn = 8; //sec, shield lasts for this.removeIn * 0.8 before shrinking
     this.tickTime = null;
   }
@@ -42,7 +42,7 @@ export class Shield {
 
     if (game.player.shield) {
       this.moves(game);
-      this.bounces(game);
+      this.bounces();
     }
   }
   isActivated(game) {
@@ -88,7 +88,7 @@ export class Shield {
     }
   }
 
-  bounces(game) {
+  bounces() {
     if (
       this.position.x > width - this.radius ||
       this.position.x <= this.radius
