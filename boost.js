@@ -1,5 +1,5 @@
 import { Entity, Velocity } from "./entity.js";
-import { collideTheseCircles } from "./utility.js";
+import { isColliding } from "./utility.js";
 
 export class Boost extends Entity {
   constructor(position, color, type) {
@@ -34,10 +34,10 @@ export class Boost extends Entity {
     }
   }
   tick(game) {
-    if (game.player.shield && collideTheseCircles(game.shield, this, 0)) {
+    if (game.player.shield && isColliding(game.shield, this, 0)) {
       this.collidesWithShield(game);
     }
-    if (collideTheseCircles(game.player, this, 0)) {
+    if (isColliding(game.player, this, 0)) {
       this.collidesWithPlayer(game);
       this.isActive(game);
     }

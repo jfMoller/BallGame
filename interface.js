@@ -3,7 +3,6 @@ const textTop2 = document.getElementById("topUiRight");
 const textBottom = document.getElementById("bottomUi");
 
 export function gameInterface(game) {
-  
   let shieldStatus = null;
   if (game.shield.ready === false) {
     shieldStatus = " ⬛️⬛️⬛️⬛️";
@@ -29,7 +28,7 @@ export function gameInterface(game) {
   if (game.shield.ready) {
     shieldStatus = " 🟩🟩🟩🟩";
   }
-  
+
   let healthStatus = "";
   for (let n = 0; n < game.player.lives; ++n) {
     healthStatus += "❤️";
@@ -59,7 +58,7 @@ export function gameInterface(game) {
 
   function styling(element) {
     element.style.fontSize = "40px";
-    element.style.color = "white"
+    element.style.color = "white";
     element.style.textAlign = "center";
     element.style.textBaseline = "center";
   }

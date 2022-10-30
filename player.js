@@ -51,10 +51,8 @@ export class Player extends Entity {
     let y = 0;
     for (let i = 0; i < 4; i++) {
       if (
-        keys[0] === false &&
-        keys[1] === false &&
-        keys[2] === false &&
-        keys[3] === false
+        keys[0] === false && keys[1] === false &&
+        keys[2] === false && keys[3] === false
       ) {
         y = 0;
         x = 0;

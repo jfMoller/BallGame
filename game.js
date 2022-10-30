@@ -1,5 +1,6 @@
 import { Boost } from "./boost.js";
-import { Enemy, Type } from "./enemy.js";
+import { Enemy } from "./enemy.js";
+import { Bouncer } from "./bouncer.js";
 import { Position, Velocity } from "./entity.js";
 import { Player } from "./player.js";
 import { Shield } from "./shield.js";
@@ -24,6 +25,7 @@ export class Game {
     ];
     //index variable for all modules
     this.index = 0;
+
     //specific entities
     this.player = this.entities[0];
     this.shield = this.entities[1];
@@ -39,6 +41,10 @@ export class Game {
     this.enemySpawnRate = 500; //ms
     this.enemiesPopped = 0;
 
+    //special enemy settings
+    this.specialEnemiesOn = true;
+    this.specialEnemySpawnRate = 10000; //ms
+
     //boost settings
     this.boostsOn = true;
     this.boostSpawnRate = 12000; //ms
@@ -50,6 +56,11 @@ export class Game {
       setInterval(() => {
         this.spawnEnemies();
       }, this.enemySpawnRate);
+    }
+    if (this.specialEnemiesOn) {
+      setInterval(() => {
+        this.spawnSpecialEnemies();
+      }, this.specialEnemySpawnRate);
     }
     if (this.boostsOn) {
       setInterval(() => {
@@ -64,23 +75,36 @@ export class Game {
     let enemyDirection = [
       new Enemy(
         new Position(Math.random() * width, 0),
-        new Velocity(randomVelocity, 100), "rgba(183, 79, 111, 1)", new Type("normal")
+        new Velocity(randomVelocity, 100),
+        "rgba(183, 79, 111, 1)"
       ),
       new Enemy(
         new Position(0, Math.random() * height),
-        new Velocity(100, randomVelocity), "rgba(183, 79, 111, 1)", new Type("normal")
+        new Velocity(100, randomVelocity),
+        "rgba(183, 79, 111, 1)"
       ),
       new Enemy(
         new Position(width, Math.random() * height),
-        new Velocity(-100, randomVelocity), "rgba(183, 79, 111, 1)", new Type("normal")
+        new Velocity(-100, randomVelocity),
+        "rgba(183, 79, 111, 1)"
       ),
       new Enemy(
         new Position(Math.random() * width, height),
-        new Velocity(randomVelocity, -100), "rgba(183, 79, 111, 1)", new Type("normal")
+        new Velocity(randomVelocity, -100),
+        "rgba(183, 79, 111, 1)"
       ),
     ];
     this.entities.push(enemyDirection[randomDirection]);
-    /* this.entities.push(new Enemy(new Position(0, 0), new Velocity(600, 600), "purple", new Type("special"))); */
+  }
+  spawnSpecialEnemies() {
+    this.entities.push(
+      new Bouncer(
+        new Position(20, 10),
+        new Velocity(500, 500),
+        "rgb(145, 145, 233)",
+        19
+      )
+    );
   }
   spawnBoosts() {
     let randomPositionX = generatesRanNumBetween(width - 100, 100);
@@ -109,8 +133,6 @@ export class Game {
 }
 
 export const game = new Game(canvas, context);
-export const player = game.player;
-export const shield = game.shield;
 
 //to determine duration of effects (currently exclusive to boosts; positive effects)
 game.tickTime_Effect;

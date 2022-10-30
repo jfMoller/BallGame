@@ -1,5 +1,5 @@
 import { game } from "./game.js";
-import {handleKeyDown, handleKeyUp} from "./event.js";
+import { handleKeyDown, handleKeyUp } from "./event.js";
 
 //player and shield movement, depending on user input
 window.addEventListener("keydown", handleKeyDown);
@@ -10,6 +10,3 @@ window.addEventListener("keyup", handleKeyUp);
 game.start();
 
 //future endscreen
-
-
- 

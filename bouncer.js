@@ -1,13 +1,11 @@
-import { Entity } from "./entity.js";
+import { Enemy } from "./enemy.js";
+import { width, height } from "./game.js";
 import { isColliding } from "./utility.js";
-import { width, height } from "./game.js"
 
-export class Enemy extends Entity {
-  constructor(position, velocity, color) {
-    super(position);
-    this.radius = 19;
-    this.velocity = velocity;
-    this.color = color;
+export class Bouncer extends Enemy {
+  constructor(position, velocity, color, radius) {
+    super(position, velocity, color);
+    this.radius = radius;
     this.borderColor = "black";
     this.lineWidth = 1;
   }
@@ -40,6 +38,7 @@ export class Enemy extends Entity {
   }
   tick(game) {
     this.moves(game);
+    this.bounces();
     if (
       isColliding(game.player, this, 0) &&
       game.player.effect.invunerable === false
@@ -51,34 +50,20 @@ export class Enemy extends Entity {
       this.collidesWithShield(game);
     }
   }
-  moves(game) {
-    this.position.x += this.velocity.dx * game.deltaTime;
-    this.position.y += this.velocity.dy * game.deltaTime;
-  }
-  collidesWithPlayer(game) {
-    game.entities.splice(game.index--, 1);
-    game.player.lives--;
-  }
-  collidesWithShield(game) {
-    if (isColliding(game.shield, this, -5)) {
-      if (this.radius > 1) {
-        this.radius -= 2;
-        this.velocity.dx -= 10;
-        this.velocity.dY -= 10;
-        if (this.radius <= 1) {
-          this.radius = 19;
-          game.entities.splice(game.index--, 1);
-          game.enemiesPopped++;
-        }
-      }
+  bounces() {
+    if (
+      this.position.x > width - this.radius ||
+      this.position.x <= this.radius
+    ) {
+      this.velocity.dx *= -1;
+      this.radius -= 0.1;
     }
-    if (isColliding(game.shield, this, 0)) {
-      if (this.velocity.dx > this.velocity.dy) {
-        this.velocity.dx *= -1;
-      }
-      if (this.velocity.dx > this.velocity.dy) {
-        this.velocity.dy *= -1;
-      }
+    if (
+      this.position.y < this.radius ||
+      this.position.y > height - this.radius
+    ) {
+      this.velocity.dy *= -1;
+      this.radius -= 0.1;
     }
   }
 }

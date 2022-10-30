@@ -1,5 +1,5 @@
 import { Velocity } from "./entity.js";
-import { width, height} from "./game.js";
+import { width, height } from "./game.js";
 
 export class Shield {
   constructor(position) {
@@ -32,7 +32,6 @@ export class Shield {
       context.stroke();
       context.fill();
       context.closePath();
-    
     }
   }
 
@@ -50,10 +49,7 @@ export class Shield {
     if (game.player.keys.space) {
       this.tickTime = game.tickTime;
     }
-    if (
-      game.tickTime - this.tickTime > this.removeIn &&
-      game.player.shield
-    ) {
+    if (game.tickTime - this.tickTime > this.removeIn && game.player.shield) {
       //shrinking
       if (this.radius > 1) {
         this.radius -= 0.8;
