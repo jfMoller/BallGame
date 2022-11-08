@@ -28,3 +28,11 @@ export function isOutsideCanvas(entity) {
     return false;
   }
 }
+
+export function addsTextToCanvas(ctx, text, fontSize, position) {
+  ctx.font = fontSize.concat(" " + "Monospace");
+  ctx.fillStyle = "white";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, position.x, position.y);
+}

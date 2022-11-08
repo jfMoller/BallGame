@@ -2,9 +2,9 @@ import { Boost } from "./boost.js";
 import { Enemy } from "./enemy.js";
 import { Bouncer } from "./bouncer.js";
 import { Position, Velocity } from "./entity.js";
+import { Menu } from "./menu.js";
 import { Player } from "./player.js";
 import { Shield } from "./shield.js";
-import { gameInterface } from "./interface.js";
 import { generatesRanNumBetween, isOutsideCanvas } from "./utility.js";
 
 export const canvas = document.getElementById("canvas");
@@ -20,6 +20,7 @@ export class Game {
     this.canvas = canvas;
     this.context = context;
     this.entities = [
+      new Menu(new Position(0, 0)),
       new Player(new Position(halfWidth, halfHeight)),
       new Shield(new Position(halfWidth, halfHeight)),
     ];
@@ -27,8 +28,8 @@ export class Game {
     this.index = 0;
 
     //specific entities
-    this.player = this.entities[0];
-    this.shield = this.entities[1];
+    this.player = this.entities[1];
+    this.shield = this.entities[2];
 
     //time variables
     this.deltaTime = 0;
@@ -150,7 +151,7 @@ function tick() {
   context.clearRect(0, 0, width, height);
 
   //game interface prototype
-  gameInterface(game);
+/*   gameInterface(game); */
 
   //draws, moves, collides and handles effects of all entities
   for (game.index = 0; game.index < game.entities.length; ++game.index) {

@@ -94,7 +94,7 @@ export class Player extends Entity {
     this.moves(game);
   }
   moves(game) {
-    if (this.keys.up && this.position.y > this.radius) {
+    if (this.keys.up && this.position.y > this.radius + 100) {
       this.position.y -= this.velocity.dy * game.deltaTime;
     }
     if (this.keys.down && this.position.y < height - this.radius) {
