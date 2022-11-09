@@ -1,20 +1,20 @@
 import { Position } from "./entity.js";
 import { addsTextToCanvas } from "./utility.js";
 import { Entity } from "./entity.js";
-import { height, width } from "./game.js"
+import { width } from "./game.js"
 
 export class Interface extends Entity {
   constructor(position) {
   super (position);
   this.height = 100;
   this.width = width;
-  this.color = "black";
+  this.color = "rgb(95, 117, 142)";
 
   this.shieldStatus = "";
   this.healthStatus = "";
   this.scoreStatus = "";
   }
-  draw(context, game) {
+  drawLast(context, game) {
     context.beginPath();
     context.rect(this.position.x, this.position.y, this.width, this.height);
     context.fillStyle = this.color;
@@ -61,20 +61,21 @@ export class Interface extends Entity {
     }
   
     //removes a zero from score every time a 0 is added in game.score
-    this.scoreStatus = ["0", "0", "0", "0", game.score];
+    let scoreStatus = ["0", "0", "0", "0", game.score];
+    
     let scoreArr = [10, 100, 1000, 10000, 99999];
   
     for (let num = 0; num < game.score; ++num) {
       for (let i = 0; i < scoreArr.length; i++) {
         if (num + 1 === scoreArr[i]) {
-          this.scoreStatus.splice(0, 1).join(",");
+          scoreStatus.splice(0, 1);
         }
         if (game.score === 99999) {
           break;
         }
       }
     }
-  
+  this.scoreStatus = scoreStatus.join("");
   }
 }
 

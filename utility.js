@@ -20,7 +20,7 @@ export function isOutsideCanvas(entity) {
   if (
     entity.position.x > width + entity.radius ||
     entity.position.x < -entity.radius ||
-    entity.position.y < -entity.radius + 100 ||
+    entity.position.y < -entity.radius ||
     entity.position.y > height + entity.radius
   ) {
     return true;
@@ -31,6 +31,7 @@ export function isOutsideCanvas(entity) {
 
 export function addsTextToCanvas(ctx, text, fontSize, position) {
   ctx.font = fontSize.concat(" " + "Monospace");
+  
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";

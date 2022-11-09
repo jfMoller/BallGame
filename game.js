@@ -28,6 +28,8 @@ export class Game {
     this.index = 0;
 
     //specific entities
+
+    this.interface = this.entities[0];
     this.player = this.entities[1];
     this.shield = this.entities[2];
 
@@ -43,7 +45,7 @@ export class Game {
     this.enemiesPopped = 0;
 
     //special enemy settings
-    this.specialEnemiesOn = false;
+    this.specialEnemiesOn = true;
     this.specialEnemySpawnRate = 10000; //ms
 
     //boost settings
@@ -75,7 +77,7 @@ export class Game {
 
     let enemyDirection = [
       new Enemy( //from above
-        new Position(Math.random() * width, 100),
+        new Position(Math.random() * width, 10),
         new Velocity(randomVelocity, 100),
         "rgba(183, 79, 111, 1)"
       ),
@@ -100,7 +102,7 @@ export class Game {
   spawnSpecialEnemies() {
     this.entities.push(
       new Bouncer(
-        new Position(0, 110),
+        new Position(width - 20, height - 20),
         new Velocity(500, 500),
         "rgb(145, 145, 233)",
         19
@@ -158,6 +160,9 @@ function tick() {
     let entity = game.entities[game.index];
     entity.tick(game);
     entity.draw(context, game);
+    //to prevent overlap of other entities
+    game.interface.drawLast(context)
+
 
     if (isOutsideCanvas(entity)) {
       game.entities.splice(game.index--, 1);
@@ -166,6 +171,7 @@ function tick() {
 
   if (game.player.lives <= 0) {
     alert("Game over! \nHigh-score: " + game.score);
+    location.reload();
     return;
   }
   requestAnimationFrame(tick);
