@@ -100,18 +100,40 @@ export class Game {
     this.entities.push(enemyDirection[randomDirection]);
   }
   spawnSpecialEnemies() {
-    this.entities.push(
-      new Bouncer(
-        new Position(width - 20, height - 20),
+    let randomDirection = generatesRanNumBetween(3, 0);
+
+    let enemyDirection = [
+      new Bouncer( //from top left corner
+        new Position(20, 120),
         new Velocity(500, 500),
         "rgb(145, 145, 233)",
         19
-      )
-    );
+      ),
+      new Bouncer( //from top right corner
+        new Position(width - 20, 120),
+        new Velocity(-500, 500),
+        "rgb(145, 145, 233)",
+        19
+      ),
+      new Bouncer( //from bottom left corner
+        new Position(20, height - 20),
+        new Velocity(500, -500),
+        "rgb(145, 145, 233)",
+        19
+      ),
+      new Bouncer( //from bottom right corner
+        new Position(width - 20, height - 20),
+        new Velocity(-500, -500),
+        "rgb(145, 145, 233)",
+        19
+      ),
+    ];
+    this.entities.push(enemyDirection[randomDirection]);
   }
+
   spawnBoosts() {
     let randomPositionX = generatesRanNumBetween(width - 100, 100);
-    let randomPositionY = generatesRanNumBetween(height - 100, 100);
+    let randomPositionY = generatesRanNumBetween(height + 300, 100);
     let randomBoost = generatesRanNumBetween(2, 0);
 
     let boostTypes = [
@@ -153,16 +175,15 @@ function tick() {
   context.clearRect(0, 0, width, height);
 
   //game interface prototype
-/*   gameInterface(game); */
+  /*   gameInterface(game); */
 
-  //draws, moves, collides and handles effects of all entities
+  //draws, moves, collides and handles effects of all entities aside from interface
   for (game.index = 0; game.index < game.entities.length; ++game.index) {
     let entity = game.entities[game.index];
     entity.tick(game);
     entity.draw(context, game);
     //to prevent overlap of other entities
-    game.interface.drawLast(context)
-
+    game.interface.drawLast(context);
 
     if (isOutsideCanvas(entity)) {
       game.entities.splice(game.index--, 1);
