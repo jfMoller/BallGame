@@ -8,10 +8,11 @@ export class Enemy extends Entity {
     this.radius = 19;
     this.velocity = velocity;
     this.color = color;
-    this.borderColor = "black";
+    this.borderColor = "#242325";
     this.lineWidth = 1;
   }
   draw(context, game) {
+    if (this.position.y >= 100) {
     context.beginPath();
     context.fillStyle = this.color;
     context.strokeStyle = this.borderColor;
@@ -25,6 +26,7 @@ export class Enemy extends Entity {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
+  }
 
     if (isColliding(game.player, this, 100)) {
       context.fillText("!", this.position.x, this.position.y);

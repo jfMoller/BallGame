@@ -2,7 +2,7 @@ import { Boost } from "./boost.js";
 import { Enemy } from "./enemy.js";
 import { Bouncer } from "./bouncer.js";
 import { Position, Velocity } from "./entity.js";
-import { Menu } from "./menu.js";
+import { Interface } from "./interface.js";
 import { Player } from "./player.js";
 import { Shield } from "./shield.js";
 import { generatesRanNumBetween, isOutsideCanvas } from "./utility.js";
@@ -20,7 +20,7 @@ export class Game {
     this.canvas = canvas;
     this.context = context;
     this.entities = [
-      new Menu(new Position(0, 0)),
+      new Interface(new Position(0, 0)),
       new Player(new Position(halfWidth, halfHeight)),
       new Shield(new Position(halfWidth, halfHeight)),
     ];
@@ -43,7 +43,7 @@ export class Game {
     this.enemiesPopped = 0;
 
     //special enemy settings
-    this.specialEnemiesOn = true;
+    this.specialEnemiesOn = false;
     this.specialEnemySpawnRate = 10000; //ms
 
     //boost settings
@@ -74,22 +74,22 @@ export class Game {
     let randomVelocity = generatesRanNumBetween(50, 0);
 
     let enemyDirection = [
-      new Enemy(
-        new Position(Math.random() * width, 0),
+      new Enemy( //from above
+        new Position(Math.random() * width, 100),
         new Velocity(randomVelocity, 100),
         "rgba(183, 79, 111, 1)"
       ),
-      new Enemy(
+      new Enemy( //from the left
         new Position(0, Math.random() * height),
         new Velocity(100, randomVelocity),
         "rgba(183, 79, 111, 1)"
       ),
-      new Enemy(
+      new Enemy( //from the right
         new Position(width, Math.random() * height),
         new Velocity(-100, randomVelocity),
         "rgba(183, 79, 111, 1)"
       ),
-      new Enemy(
+      new Enemy( //from below
         new Position(Math.random() * width, height),
         new Velocity(randomVelocity, -100),
         "rgba(183, 79, 111, 1)"
@@ -100,7 +100,7 @@ export class Game {
   spawnSpecialEnemies() {
     this.entities.push(
       new Bouncer(
-        new Position(20, 10),
+        new Position(0, 110),
         new Velocity(500, 500),
         "rgb(145, 145, 233)",
         19

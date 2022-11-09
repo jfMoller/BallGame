@@ -59,7 +59,7 @@ export class Bouncer extends Enemy {
       this.radius -= 0.1;
     }
     if (
-      this.position.y < this.radius ||
+      this.position.y < this.radius + 100 ||
       this.position.y > height - this.radius
     ) {
       this.velocity.dy *= -1;

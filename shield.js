@@ -79,8 +79,8 @@ export class Shield {
     if (this.position.y + this.radius > height) {
       this.position.y = height - this.radius + 1;
     }
-    if (this.position.y < this.radius) {
-      this.position.y = this.radius - 1;
+    if (this.position.y < this.radius + 100) {
+      this.position.y = this.radius + 100 - 1;
     }
   }
 
@@ -92,7 +92,7 @@ export class Shield {
       this.velocity.dx *= -1;
     }
     if (
-      this.position.y < this.radius ||
+      this.position.y < this.radius + 100 ||
       this.position.y > height - this.radius
     ) {
       this.velocity.dy *= -1;

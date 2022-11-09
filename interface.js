@@ -1,15 +1,26 @@
 import { Position } from "./entity.js";
 import { addsTextToCanvas } from "./utility.js";
 import { Entity } from "./entity.js";
+import { height, width } from "./game.js"
 
-export class Menu extends Entity {
+export class Interface extends Entity {
   constructor(position) {
   super (position);
+  this.height = 100;
+  this.width = width;
+  this.color = "black";
+
   this.shieldStatus = "";
   this.healthStatus = "";
   this.scoreStatus = "";
   }
   draw(context, game) {
+    context.beginPath();
+    context.rect(this.position.x, this.position.y, this.width, this.height);
+    context.fillStyle = this.color;
+    context.fill();
+
+
   addsTextToCanvas(context, "Shield: " + this.shieldStatus, "30px", new Position( canvas.width * 0.25, 50))
 
   addsTextToCanvas(context, "Health: " + this.healthStatus, "30px", new Position( canvas.width * 0.5, 50))
