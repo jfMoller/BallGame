@@ -1,28 +1,22 @@
 <html>
   <head>
     <style>
-      body {
+      html {
+        height: 100%;
         zoom: 65%;
-        background-color: black;
-        margin: 0;
-        padding: 0;
-      }
-      #canvas_border {
-        margin: 0;
-        padding: 0;
       }
 
-      .flexbox {
+      body {
         display: flex;
-        flex-direction: column;
-        align-self: center;
         justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: black;
       }
 
       #canvas_container {
-        width: 100vh;
-        height: 100%;
-        padding: 0;
+        width: 1400px;
+        height: 700px;
       }
       #canvas {
         border: solid rgb(95, 117, 142);
@@ -31,14 +25,10 @@
     </style>
   </head>
   <body>
-    <div id="canvas_border">
-      <div class="flexbox">
-        <div class="center-screen">
-          <div id="canvas_container">
-            <canvas id="canvas" width="1400px" height="1100px"> </canvas>
-            <script type="module" src="main.js"></script>
-          </div>
-        </div>
+    <div class="center-screen">
+      <div id="canvas_container">
+        <canvas id="canvas" width="1400px" height="1100px"> </canvas>
+        <script type="module" src="main.js"></script>
       </div>
     </div>
   </body>
